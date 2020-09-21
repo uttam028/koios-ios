@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+   sensorcoreconfig.plist
+   cimonv2
+
+   Created by Afzal Hossain on 1/23/19.
+   Copyright (c) 2019 Afzal Hossain. All rights reserved.
+-->
+<plist version="1.0">
+    <dict>
+        <key>gyroSensing</key>
+        <false/>
+        <key>gyroFrequency</key>
+        <integer>60</integer>
+        <key>accelSensing</key>
+        <true/>
+        <key>accelFrequency</key>
+        <integer>60</integer>
+        <key>magnetSensing</key>
+        <false/>
+        <key>magnetFrequency</key>
+        <string>60</string>
+        <key>devicemotionSensing</key>
+        <false/>
+        <key>devicemotionFrequency</key>
+        <integer>60</integer>
+        <key>altimeterSensing</key>
+        <false/>
+        <key>batteryStateEvent</key>
+        <true/>
+        <key>batteryLevelEvent</key>
+        <true/>
+        <key>screenEvent</key>
+        <true/>
+        <key>displayEvent</key>
+        <true/>
+    </dict>
+</plist>
