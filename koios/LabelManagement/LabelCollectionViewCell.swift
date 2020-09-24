@@ -59,6 +59,7 @@ class LabelCollectionViewCell: UICollectionViewCell {
         tapIconLabel.adjustsFontSizeToFitWidth = true
         tapIconLabel.minimumScaleFactor = 0.5
         tapIconLabel.translatesAutoresizingMaskIntoConstraints = false
+        tapIconLabel.textColor = .black
         
         if let name = imageName, !imageName.isEmpty{
             tapIconImageView = TapIconImageView()

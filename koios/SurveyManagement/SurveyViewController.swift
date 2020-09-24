@@ -303,7 +303,12 @@ class SurveyViewController: FormViewController {
     func tableView(_: UITableView, willDisplayHeaderView view: UIView, forSection: Int) {
         
         if let view = view as? UITableViewHeaderFooterView {
-            view.textLabel?.textColor = .black
+            if UIViewController().traitCollection.userInterfaceStyle == .dark{
+                view.textLabel?.textColor = .white
+            }else{
+                view.textLabel?.textColor = .black
+            }
+
             if(view.textLabel?.text?.hasPrefix("*"))!{
                 view.textLabel?.textColor = UIColor(hue: 0.4917, saturation: 0.86, brightness: 0.65, alpha: 1.0)
             }

@@ -82,6 +82,11 @@ class MyStudiesViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mystudylistcell", for: indexPath) as! MyStudyListViewCell
         cell.studyNameLabel.text = myStudies[indexPath.row].name
+        if UIViewController().traitCollection.userInterfaceStyle == .dark{
+            cell.studyNameLabel.textColor = .white
+        }else{
+            cell.studyNameLabel.textColor = .black
+        }
         return cell
     }
     

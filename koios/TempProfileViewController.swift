@@ -10,7 +10,7 @@ import UIKit
 import Eureka
 
 class TempProfileViewController: FormViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -58,6 +58,21 @@ class TempProfileViewController: FormViewController {
                     row.placeholder = "Enter Text Here"
                 }
                 
+        }
+        
+        form +++ Section()
+            <<< TextRow(){row in
+                row.title = "Device Model Number"
+                
+                if let deviceModelNumber = Utils.getDataFromUserDefaults(key: "device_model_number") as! String?{
+                    if deviceModelNumber.isEmpty{
+                        row.placeholder = "Enter Text Here"
+                    }else{
+                        row.value = deviceModelNumber
+                    }
+                }else{
+                    row.placeholder = "Enter Text Here"
+                }
         }
         
         form +++ Section()
@@ -135,15 +150,15 @@ class TempProfileViewController: FormViewController {
                 }else{
                     row.placeholder = "Enter Text Here"
                 }
-        }
-
+            }
+        
     }
     
     
     /*override var preferredStatusBarStyle: UIStatusBarStyle{
-        return UIStatusBarStyle.lightContent
-    }*/
-
+     return UIStatusBarStyle.lightContent
+     }*/
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -191,12 +206,16 @@ class TempProfileViewController: FormViewController {
                     let organizationRow = form.rows[i] as! TextRow
                     let organization = organizationRow.value ?? ""
                     Utils.saveDataToUserDefaults(data: organization, key: "organization")
+                }else if title.lowercased().hasPrefix("device"){
+                    let deviceNumRow = form.rows[i] as! TextRow
+                    let deviceNum = deviceNumRow.value ?? ""
+                    Utils.saveDataToUserDefaults(data: deviceNum, key: "device_model_number")
                 }
             }
         }
         
         performSegue(withIdentifier: "loadhomesegue", sender: nil)
-
+        
     }
     
     

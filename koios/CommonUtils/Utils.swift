@@ -80,6 +80,15 @@ class Utils: NSObject {
         return ""
     }
     
+    static func dateFromString(str:String!)->Date?{
+        if let inputDate = str{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            return dateFormatter.date(from: inputDate)
+        }
+        return nil
+    }
+    
     //MARK: default values
     static var defaultOrganization:String{
         return "University of Notre Dame"

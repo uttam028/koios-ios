@@ -78,7 +78,7 @@ class ContextViewController: UIViewController {
 
         // Do any additional setup after loading the view, typically from a nib.
         view.backgroundColor = UIColor.white
-        self.title = "Labelling"
+        self.title = "Labeling"
         
         let options = PagingMenuOptions()
         let pagingMenuController = PagingMenuController(options: options)

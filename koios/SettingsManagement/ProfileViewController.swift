@@ -8,17 +8,19 @@
 
 import UIKit
 import Eureka
+import SwiftyJSON
+import Alamofire
 
 class ProfileViewController: FormViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Update", style: .plain, target: self, action: #selector(updateProfile))
-
+        
         self.navigationItem.title = "Profile"
-
+        
         form +++ Section()
             <<< TextRow(){ row in
                 row.title = "Email"
@@ -26,7 +28,7 @@ class ProfileViewController: FormViewController {
                 row.value = email
                 //row.placeholder = email
                 row.disabled = true
-            }
+        }
         
         form +++ Section()
             <<< TextRow(){row in
@@ -58,14 +60,31 @@ class ProfileViewController: FormViewController {
                     row.placeholder = "Enter Text Here"
                 }
                 
-            }
+        }
+        
+        form +++ Section()
+            <<< TextRow(){row in
+                row.title = "Device Model Number"
+                
+                if let deviceModelNumber = Utils.getDataFromUserDefaults(key: "device_model_number") as! String?{
+                    if deviceModelNumber.isEmpty{
+                        row.placeholder = "Enter Text Here"
+                    }else{
+                        row.value = deviceModelNumber
+                    }
+                }else{
+                    row.placeholder = "Enter Text Here"
+                }
+        }
+        
         
         form +++ Section()
             <<< DateRow(){row in
                 row.title = "Birth Date"
                 //row.value = Date(timeIntervalSinceNow: 0)
                 if let birthDate = Utils.getDataFromUserDefaults(key: "birthdate") as! String?{
-                    row.value = Date(timeIntervalSince1970: TimeInterval(birthDate)!)
+                    //row.value = Date(timeIntervalSince1970: TimeInterval(birthDate)!)
+                    row.value = Utils.dateFromString(str: birthDate)
                 }
             }
             <<< ActionSheetRow<String>(){row in
@@ -73,8 +92,8 @@ class ProfileViewController: FormViewController {
                 row.selectorTitle = "Specify Your Gender"
                 row.options = ["Male", "Female", "Other", "I do not like to share"]
                 //row.onChange({_ in
-                    //print("value has been changed...")
-                    //self.navigationItem.rightBarButtonItem?.isEnabled = true
+                //print("value has been changed...")
+                //self.navigationItem.rightBarButtonItem?.isEnabled = true
                 //})
                 if let gender = Utils.getDataFromUserDefaults(key: "gender") as! String?{
                     if !gender.isEmpty{
@@ -95,8 +114,8 @@ class ProfileViewController: FormViewController {
                         }
                     }
                 }
-            }
-
+        }
+        
         
         form +++ Section()
             <<< PushRow<String>(){row in
@@ -135,7 +154,8 @@ class ProfileViewController: FormViewController {
                 }else{
                     row.placeholder = "Enter Text Here"
                 }
-            }
+        }
+        
     }
     
     
@@ -146,10 +166,11 @@ class ProfileViewController: FormViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
+    
     @objc func updateProfile(){
         print("profile updated...")
-        fatalError()
+        
+        var profileDict = [String:String]()
         
         for i in 0..<form.allRows.count{
             if let title = form.allRows[i].title{
@@ -157,43 +178,82 @@ class ProfileViewController: FormViewController {
                 if title.lowercased().hasPrefix("first"){
                     let firstNameRow = form.rows[i] as! TextRow
                     let firstName = firstNameRow.value ?? ""
-                    Utils.saveDataToUserDefaults(data: firstName, key: "firstname")
+                    let key:String = "firstname"
+                    Utils.saveDataToUserDefaults(data: firstName, key: key)
+                    profileDict[key] = firstName
                 }else if title.lowercased().hasPrefix("last"){
                     let lastNameRow = form.rows[i] as! TextRow
                     let lastName = lastNameRow.value ?? ""
-                    Utils.saveDataToUserDefaults(data: lastName, key: "lastname")
+                    let key:String = "lastname"
+                    Utils.saveDataToUserDefaults(data: lastName, key: key)
+                    profileDict[key] = lastName
                 }else if title.lowercased().hasPrefix("birth"){
                     let birthDateRow = form.rows[i] as! DateRow
                     if let birthDate = birthDateRow.value{
-                        let dateString = String(birthDate.timeIntervalSince1970)
-                        Utils.saveDataToUserDefaults(data: dateString, key: "birthdate")
+                        let dateString = Utils.stringFromDate(date: birthDate)
+                        let key:String = "birthdate"
+                        Utils.saveDataToUserDefaults(data: dateString, key: key)
+                        profileDict[key] = dateString
                     }
                 }else if title.lowercased().hasPrefix("gender"){
                     let genderRow = form.rows[i] as! ActionSheetRow<String>
                     let gender = genderRow.value ?? ""
-                    Utils.saveDataToUserDefaults(data: gender, key: "gender")
+                    let key:String = "gender"
+                    Utils.saveDataToUserDefaults(data: gender, key: key)
+                    profileDict[key] = gender
                 }else if title.lowercased().hasPrefix("ethnic"){
                     let ethnicRow = form.rows[i] as! PushRow<String>
                     let ethnic = ethnicRow.value ?? ""
-                    Utils.saveDataToUserDefaults(data: ethnic, key: "ethnicity")
+                    let key:String = "ethnicity"
+                    Utils.saveDataToUserDefaults(data: ethnic, key: key)
+                    profileDict[key] = ethnic
                 }else if title.lowercased().hasPrefix("language"){
                     let languageRow = form.rows[i] as! PushRow<String>
                     let language = languageRow.value ?? ""
-                    Utils.saveDataToUserDefaults(data: language, key: "language")
+                    let key:String = "language"
+                    Utils.saveDataToUserDefaults(data: language, key: key)
+                    profileDict[key] = language
                 }else if title.lowercased().hasPrefix("education"){
                     let educationRow = form.rows[i] as! PushRow<String>
                     let education = educationRow.value ?? ""
-                    Utils.saveDataToUserDefaults(data: education, key: "education")
+                    let key:String = "education"
+                    Utils.saveDataToUserDefaults(data: education, key: key)
+                    profileDict[key] = education
                 }else if title.lowercased().hasPrefix("organization"){
                     let organizationRow = form.rows[i] as! TextRow
                     let organization = organizationRow.value ?? ""
-                    Utils.saveDataToUserDefaults(data: organization, key: "organization")
+                    let key:String = "organization"
+                    Utils.saveDataToUserDefaults(data: organization, key: key)
+                    profileDict[key] = organization
+                }else if title.lowercased().hasPrefix("device"){
+                    let deviceNumRow = form.rows[i] as! TextRow
+                    let deviceNum = deviceNumRow.value ?? ""
+                    let key:String = "device_model_number"
+                    Utils.saveDataToUserDefaults(data: deviceNum, key: key)
+                    profileDict[key] = deviceNum
                 }
             }
         }
+
+        let email:String = Utils.getDataFromUserDefaults(key: "email") as! String
+        let parameters = profileDict
+        let serviceUrl = Utils.getBaseUrl() + "signup/profile?email=\(email)&uuid=\(Utils.getDeviceIdentifier())"
+        
+        Alamofire.request(serviceUrl, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).validate().responseJSON { response in
+            switch response.result {
+            case .success:
+                let json = JSON(response.result.value as Any)
+                let responseStruct = Response.responseFromJSONData(jsonData: json)
+                print("response code \(responseStruct.code)")
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+        
         
         self.navigationController?.popViewController(animated: true)
-
+        
     }
-
+    
 }
