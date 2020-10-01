@@ -369,6 +369,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                         }
                         if (response.length == 0 && taskList[taskIndex].isRequired == 1){
                             displayRequiredAlert(qNumber: (i+1))
+                            return
                         }
                     }else if taskType == "textarea"{
                         let row:TextAreaRow = form.rowBy(tag: "\(sectionTag)_row")!
@@ -377,12 +378,14 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                         }
                         if (response.length == 0 && taskList[taskIndex].isRequired == 1){
                             displayRequiredAlert(qNumber: (i+1))
+                            return
                         }
                     }else if taskType == "date"{
                         let row:DateRow = form.rowBy(tag: "\(sectionTag)_row")!
                         response = Utils.stringFromDate(date: row.value)
                         if (response.length == 0 && taskList[taskIndex].isRequired == 1){
                             displayRequiredAlert(qNumber: (i+1))
+                            return
                         }
                         
                     }else if taskType == "selection"{
@@ -407,6 +410,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                         
                         if (taskList[taskIndex].isRequired == 1 && (response.length == 0 && comment.length==0)){
                             displayRequiredAlert(qNumber: (i+1))
+                            return
                         }
                         
                     }else if taskType == "choice"{
@@ -428,6 +432,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                         }
                         if (taskList[taskIndex].isRequired == 1 && (response.length == 0 && comment.length==0)){
                             displayRequiredAlert(qNumber: (i+1))
+                            return
                         }
                     }else if taskType == "recording"{
                         responseType = "object"
@@ -435,6 +440,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                         objectUrl = fileResponseDict[objectKey] ?? ""
                         if (taskList[taskIndex].isRequired == 1 && objectUrl.length == 0){
                             displayRequiredAlert(qNumber: (i+1))
+                            return
                         }
 
                     }
@@ -470,6 +476,10 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
         printAllResponses(responses: getAllResponses())
         print("total rows: \(getAllResponses().count)")
         Syncer.sharedInstance.uploadSurveyResponses()
+        
+        //reno - save current time as last survey response time
+        UserDefaults.standard.set(Date(), forKey: String(surveyId))
+        
         self.navigationController?.popViewController(animated: true)
         
     }

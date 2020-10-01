@@ -32,8 +32,11 @@ class RecordingController: UIViewController, AVAudioRecorderDelegate, AVAudioPla
     var recordedAlready = false;
     var playingRecording = false;
     var recording = false;
+    
+    var uploadBarButton: UIBarButtonItem!
+    
     var playButton: UIButton!
-    var uploadButton: UIButton!
+//    var uploadButton: UIButton!
     var recordInstructions: UILabel!
     var uploadInstructions: UILabel!
     
@@ -53,7 +56,11 @@ class RecordingController: UIViewController, AVAudioRecorderDelegate, AVAudioPla
         self.taskId = taskId
         self.version = version
         self.objectKey = objectKey
+        
+        
         super.init(nibName: nil, bundle: nil)
+        uploadBarButton = UIBarButtonItem(title: "Upload", style: .plain, target: self, action: #selector(uploadTapped(_:)))
+        self.navigationItem.rightBarButtonItem = nil
     }
     
     required init?(coder: NSCoder) {
@@ -67,22 +74,22 @@ class RecordingController: UIViewController, AVAudioRecorderDelegate, AVAudioPla
         
         recordButton = UIButton(type: .system)
         playButton = UIButton(type: .system)
-        uploadButton = UIButton(type: .system)
+//        uploadButton = UIButton(type: .system)
         
         recordInstructions = UILabel()
         let w = UIScreen.main.bounds.width
-        recordInstructions.frame = CGRect(x: w/2, y: 200, width: 500, height: 20)
-        recordInstructions.center = CGPoint(x: w/2, y: 200)
+        recordInstructions.frame = CGRect(x: w/2, y: 500, width: 500, height: 20)
+        recordInstructions.center = CGPoint(x: w/2, y: 500)
         recordInstructions.textAlignment = .center
         
         uploadInstructions = UILabel()
-        uploadInstructions.frame = CGRect(x: w/2, y: 500, width: 500, height: 20)
-        uploadInstructions.center = CGPoint(x: w/2, y: 500)
+        uploadInstructions.frame = CGRect(x: w/2, y: 200, width: 500, height: 20)
+        uploadInstructions.center = CGPoint(x: w/2, y: 200)
         uploadInstructions.textAlignment = .center
         
         recordButton.frame = CGRect(x: 50, y: 300, width: 100, height: 30)
         playButton.frame = CGRect(x: 225, y: 300, width: 100, height: 30)
-        uploadButton.frame = CGRect(x: 135, y: 400, width: 100, height: 20)
+//        uploadButton.frame = CGRect(x: 135, y: 400, width: 100, height: 20)
         
         
         self.view.addSubview(recordInstructions)
@@ -90,8 +97,8 @@ class RecordingController: UIViewController, AVAudioRecorderDelegate, AVAudioPla
         
         
         
-        uploadButton.titleLabel?.font = UIFont(name: "font", size: 400)
-        uploadButton.setTitle("Upload", for: .normal)
+//        uploadButton.titleLabel?.font = UIFont(name: "font", size: 400)
+//        uploadButton.setTitle("Upload", for: .normal)
         
         
         self.view.backgroundColor = UIColor.white
@@ -121,8 +128,8 @@ class RecordingController: UIViewController, AVAudioRecorderDelegate, AVAudioPla
     
     
     func uploadButtonUI(){
-        self.view.addSubview(uploadButton)
-        uploadButton.addTarget(self, action: #selector(uploadTapped), for: .touchUpInside)
+//        self.view.addSubview(uploadButton)
+//        uploadButton.addTarget(self, action: #selector(uploadTapped), for: .touchUpInside)
     }
     
     func playRecordingUI(){
@@ -148,6 +155,8 @@ class RecordingController: UIViewController, AVAudioRecorderDelegate, AVAudioPla
     }
     
     func startRecording(_ sender: UIButton) {
+        self.navigationItem.rightBarButtonItem = nil
+        uploadInstructions.isHidden = true
         if !recordedAlready
         {
             audioFilename = getDocumentsDirectory().appendingPathComponent(fileName)
@@ -189,6 +198,8 @@ class RecordingController: UIViewController, AVAudioRecorderDelegate, AVAudioPla
         recording = false
         recordInstructions.text = "Click on the microphone to re-record"
         uploadInstructions.text = "Click upload to submit the file"
+        uploadInstructions.isHidden = false
+        self.navigationItem.rightBarButtonItem = uploadBarButton
         if #available(iOS 13.0, *) {
             recordButton.setImage(UIImage(systemName:"mic"), for: .normal)
         } else {

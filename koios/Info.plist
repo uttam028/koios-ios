@@ -25,11 +25,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Koios uses location service in energy efficient manner for running in the background. Please select &quot;Always Allow&quot; to maintain compliance in the study.</string>
+	<string>Koios uses location service in energy efficient manner for running in the background. Please select &amp;quot;Always Allow&amp;quot; to maintain compliance in the study.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Koios uses location service in energy efficient manner for running in the background. Please select &quot;Always Allow&quot; to maintain compliance in the study.</string>
+	<string>Koios uses location service in energy efficient manner for running in the background. Please select &amp;quot;Always Allow&amp;quot; to maintain compliance in the study.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Koios uses location service in energy efficient manner for running in the background. Please select &quot;Always Allow&quot; to maintain compliance in the study.</string>
+	<string>Koios uses location service in energy efficient manner for running in the background. Please select &amp;quot;Always Allow&amp;quot; to maintain compliance in the study.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

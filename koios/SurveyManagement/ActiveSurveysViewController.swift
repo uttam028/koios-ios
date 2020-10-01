@@ -140,8 +140,79 @@ class ActiveSurveysViewController: UITableViewController, NSFetchedResultsContro
         guard let object = self.fetchedResultsController?.object(at: indexPath) else {
             fatalError("Attempt to configure cell without a managed object")
         }
-        cell.nameLabel.text = (object as! Survey).name
-        cell.descLabel.text = (object as! Survey).studyName
+        
+//        reno - comment before special changes
+//        cell.nameLabel.text = (object as! Survey).name
+//        cell.descLabel.text = (object as! Survey).studyName
+        
+//        reno - special changes for first responder study
+        if let date = UserDefaults.standard.object(forKey: String((object as! Survey).surveyId))
+        {
+            let df = DateFormatter()
+            df.dateFormat = "dd/MM/yyyy HH:mm"
+            print("heres", df.string(from: date as! Date))
+            let current = Date()
+            let differenceInSeconds = Int(current.timeIntervalSince(date as! Date))
+            let differenceInDays = Int(differenceInSeconds / (60 * 60 * 24));
+            cell.nameLabel.text = "Completed: \(differenceInDays) day(s) ago"
+            print("surveyName: \((object as! Survey).name), \((object as! Survey).surveyId)  \((object as! Survey).scheduleCode)")
+            
+            if differenceInDays > 1{
+                cell.nameLabel.text = "Completed: \(differenceInDays) days ago"
+            }
+            else if differenceInDays == 1{
+                cell.nameLabel.text = "Completed yesterday"
+            }
+            else if differenceInDays == 0{
+                cell.nameLabel.text = "Completed today"
+            }
+            switch (object as! Survey).scheduleCode {
+            case "always":
+                
+                // NOTE: Special case only for First Responder Emotion Study
+                if (object as! Survey).surveyId == 22{ // dealing with follow-up
+                    if let eventSurveyDate = UserDefaults.standard.object(forKey: "23") // get info on last time event survey was taken
+                    {
+                        let dfEventSurvey = DateFormatter()
+                        dfEventSurvey.dateFormat = "dd/MM/yyyy HH:mm"
+                        let differenceInSecondsEventSurvey = Int(current.timeIntervalSince(eventSurveyDate as! Date))
+                        let differenceInDaysEventSurvey = Int(differenceInSecondsEventSurvey / (60 * 60 * 24));
+                        
+                        if differenceInDaysEventSurvey < 3 && differenceInSecondsEventSurvey < differenceInSeconds{
+                            cell.nameLabel.textColor = .red
+                        }
+                        else{
+                            cell.nameLabel.textColor = .black
+                        }
+                    }
+                    
+                }
+            case "weekly":
+                if differenceInDays >= 7{
+                    cell.nameLabel.textColor = .red
+                }
+            case "monthly":
+                if differenceInDays >= 31{
+                    cell.nameLabel.textColor = .red
+                }
+            default:
+                cell.nameLabel.textColor = .black
+            }
+        }
+        else{
+            print("Nothing yet")
+            cell.nameLabel.text = "Not completed yet"
+            
+            // NOTE: Special case only for First Responder Emotion Study
+            if (object as! Survey).surveyId != 22 && (object as! Survey).surveyId != 23{
+                cell.nameLabel.textColor = .red
+            }
+
+        }
+        
+        cell.descLabel.text = (object as! Survey).name
+//        reno - end of special implementation
+        
         return cell
     }
     
