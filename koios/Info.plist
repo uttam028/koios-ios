@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Koios uses microphone for voice recording for surveys</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -23,11 +25,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Koios uses location service in energy efficient manner for running in the background. Please select "Always Allow" to maintain compliance in the study.</string>
+	<string>Koios uses location service in energy efficient manner for running in the background. Please select &quot;Always Allow&quot; to maintain compliance in the study.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Koios uses location service in energy efficient manner for running in the background. Please select "Always Allow" to maintain compliance in the study.</string>
+	<string>Koios uses location service in energy efficient manner for running in the background. Please select &quot;Always Allow&quot; to maintain compliance in the study.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Koios uses location service in energy efficient manner for running in the background. Please select "Always Allow" to maintain compliance in the study.</string>
+	<string>Koios uses location service in energy efficient manner for running in the background. Please select &quot;Always Allow&quot; to maintain compliance in the study.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

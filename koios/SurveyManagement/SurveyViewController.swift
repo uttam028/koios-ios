@@ -10,7 +10,8 @@ import UIKit
 import Eureka
 import CoreData
 
-class SurveyViewController: FormViewController {
+class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
+
     //studyId, surveyId, version is updated from ActiveSurveyViewController.swift
     var studyId:Int32 = 0
     var surveyId:Int32 = 0
@@ -18,7 +19,7 @@ class SurveyViewController: FormViewController {
     
     var taskList:[Task] = []
     var surveyResponse:[SurveyResponse] = []
-    var referenceDict = Dictionary<Int, String>()
+    var fileResponseDict = Dictionary<String, String>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +45,7 @@ class SurveyViewController: FormViewController {
                     }
                     section.header = HeaderFooterView(title: quesString.appending(task.text!))
                     section.tag = sectionTag
+
                     }
                     <<< TextRow(){row in
                         row.placeholder = "Type your answer"
@@ -135,6 +137,26 @@ class SurveyViewController: FormViewController {
                 }
                 
                 
+            }else if type.lowercased() == "recording"{
+                let sectionTag = "\(i)_\(type)"
+                let rowTag = sectionTag.appending("_row")
+                form +++ Section(){ section in
+                    if(task.isRequired>0){
+                        quesString = "*".appending(quesString)
+                    }
+                    section.header = HeaderFooterView(title: quesString.appending(task.text!))
+                    section.tag = sectionTag
+                    }
+                    <<< ButtonRow(){row in
+                        row.title = "Click here to record"
+                        row.onCellSelection {cell, row in
+                            self.fileResponseDict[rowTag] = ""
+                            let secondVC = RecordingController(studyId: self.studyId, surveyId: self.surveyId, taskId: self.taskList[i].taskId, version: self.version, objectKey: rowTag)
+                            secondVC.delegate = self
+                            self.navigationController?.pushViewController(secondVC, animated: true)
+                            // fileForSubmission
+                        }
+                }
             }/*else if type.contains(s: "MT001"){
              print("task type: \(taskList[i].type)")
              var instString = "Tap to Start"
@@ -407,8 +429,14 @@ class SurveyViewController: FormViewController {
                         if (taskList[taskIndex].isRequired == 1 && (response.length == 0 && comment.length==0)){
                             displayRequiredAlert(qNumber: (i+1))
                         }
-                    }else if taskType == "motortask"{
-                        responseType = "reference"
+                    }else if taskType == "recording"{
+                        responseType = "object"
+                        let objectKey = "\(sectionTag)_row"
+                        objectUrl = fileResponseDict[objectKey] ?? ""
+                        if (taskList[taskIndex].isRequired == 1 && objectUrl.length == 0){
+                            displayRequiredAlert(qNumber: (i+1))
+                        }
+
                     }
                 }
                 surveyResponses.append(SurveyResponseStruct(studyId: self.studyId, surveyId: self.surveyId, taskId: self.taskList[taskIndex].taskId, version: self.version, submissionTime: String(Utils.currentUnixTime()), submissionTimeZone: "", answerType: responseType, answer: response, comment: comment, objectUrl: objectUrl))
@@ -488,7 +516,11 @@ class SurveyViewController: FormViewController {
     func childViewControllerResponse(refernceAnswer: String) {
         print("reference answer: \(refernceAnswer)")
     }
-    
+
+    func passRecordingURL(objectKey: String, objectUrl: String) {
+        print("receive key and value from delegate, \(objectKey), \(objectUrl)")
+        fileResponseDict[objectKey] = objectUrl
+    }
     
     /*
      // MARK: - Navigation

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		670E4C8B54FBF8E33BA40030 /* libPods-koios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AA4F4B1A61A7843C2FF60C0 /* libPods-koios.a */; };
+		DD399AB82524E97800DB1B8B /* RecordingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD399AB72524E97800DB1B8B /* RecordingController.swift */; };
 		DD3E8B032505528C0062CF4A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DD3E8B022505528C0062CF4A /* GoogleService-Info.plist */; };
 		DD4B12FF24DDB766004D19CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4B12FE24DDB766004D19CB /* AppDelegate.swift */; };
 		DD4B130124DDB766004D19CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4B130024DDB766004D19CB /* SceneDelegate.swift */; };
@@ -96,6 +97,7 @@
 		8280D6C22012822B34BD9F6A /* Pods-koios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koios.release.xcconfig"; path = "Target Support Files/Pods-koios/Pods-koios.release.xcconfig"; sourceTree = "<group>"; };
 		9AA4F4B1A61A7843C2FF60C0 /* libPods-koios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-koios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD0128762509F5D60029D5C3 /* koios v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "koios v2.xcdatamodel"; sourceTree = "<group>"; };
+		DD399AB72524E97800DB1B8B /* RecordingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingController.swift; sourceTree = "<group>"; };
 		DD3E8B022505528C0062CF4A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DD4B12FB24DDB766004D19CB /* koios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = koios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD4B12FE24DDB766004D19CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -277,6 +279,7 @@
 		DD7A874D24E05A4D00F46DB4 /* SurveyManagement */ = {
 			isa = PBXGroup;
 			children = (
+				DD399AB72524E97800DB1B8B /* RecordingController.swift */,
 				DD7A878124E06C6F00F46DB4 /* CustomCells.swift */,
 				DD7A878224E06C6F00F46DB4 /* FloatLabelTextField.swift */,
 				DD7A875024E05A6700F46DB4 /* ActiveSurveysViewCell.swift */,
@@ -581,6 +584,7 @@
 				DD7A87CD24E0DD9900F46DB4 /* MenuViewCustomizable.swift in Sources */,
 				DD7A876F24E05E3C00F46DB4 /* VerifyTokenViewController.swift in Sources */,
 				DD7A87C524E0DD9900F46DB4 /* MenuView.swift in Sources */,
+				DD399AB82524E97800DB1B8B /* RecordingController.swift in Sources */,
 				DD7A876624E05A9D00F46DB4 /* Extension.swift in Sources */,
 				DD7A87C424E0DD9900F46DB4 /* PagingViewController.swift in Sources */,
 				DD7A87CF24E0DD9900F46DB4 /* MZTimerLabel.m in Sources */,
