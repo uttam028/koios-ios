@@ -178,7 +178,7 @@ class ActiveSurveysViewController: UITableViewController, NSFetchedResultsContro
                         let differenceInSecondsEventSurvey = Int(current.timeIntervalSince(eventSurveyDate as! Date))
                         let differenceInDaysEventSurvey = Int(differenceInSecondsEventSurvey / (60 * 60 * 24));
                         
-                        if differenceInDaysEventSurvey < 3 && differenceInSecondsEventSurvey < differenceInSeconds{
+                        if differenceInDaysEventSurvey > 0 && differenceInDaysEventSurvey < 3 && differenceInSecondsEventSurvey < differenceInSeconds{
                             cell.nameLabel.textColor = .red
                         }
                         else{
