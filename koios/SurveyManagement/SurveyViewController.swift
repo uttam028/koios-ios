@@ -30,9 +30,9 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
         
         taskList = Syncer.sharedInstance.getAllTasks(studyId: studyId, surveyId: surveyId)
 
-        
+        var decrementForHeaders = 0
         for i in 0..<taskList.count{
-            var quesString = "Q \(i+1). "
+            var quesString = "Q \(i + 1 - decrementForHeaders). "
             print("comment:\(taskList[i].hasComment), q:\(taskList[i].text)")
             let type:String = taskList[i].type!
             let task = taskList[i]
@@ -66,7 +66,16 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                         row.placeholder = "Type your answer"
                         row.tag = rowTag
                 }
-            }else if type.lowercased() == "date"{
+            }else if type.lowercased() == "noresponse"{
+                let sectionTag = "\(i)_\(type)"
+                let rowTag = sectionTag.appending("_row")
+                form +++ Section(){ section in
+                    section.header = HeaderFooterView(title: task.text!)
+                    section.tag = sectionTag
+                    decrementForHeaders+=1;
+                }
+            }
+            else if type.lowercased() == "date"{
                 let sectionTag = "\(i)_\(type)"
                 let rowTag = sectionTag.appending("_row")
                 
