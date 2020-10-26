@@ -66,7 +66,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                         row.placeholder = "Type your answer"
                         row.tag = rowTag
                 }
-            }else if type.lowercased() == "noresponse"{
+            }else if type.lowercased() == "instruction"{
                 let sectionTag = "\(i)_\(type)"
                 let rowTag = sectionTag.appending("_row")
                 form +++ Section(){ section in
