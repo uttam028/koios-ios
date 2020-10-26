@@ -18,9 +18,11 @@ class ActiveSurveysViewCell: UITableViewCell {
         // Initialization code
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         descLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.adjustsFontSizeToFitWidth = true
         
         descLabel.font = UIFont(name: "HelveticaNeue-Light", size:22)
         nameLabel.font = UIFont (name: "Baskerville", size: 20)
+        descLabel.adjustsFontSizeToFitWidth = true
         
         contentView.addSubview(descLabel)
         contentView.addSubview(nameLabel)

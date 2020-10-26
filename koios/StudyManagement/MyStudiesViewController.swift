@@ -13,6 +13,11 @@ class MyStudiesViewController: UITableViewController {
     var myStudies:[StudyStruct]! = []
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        tableView.allowsSelection = true
+        self.tableView.delegate = self;
+        self.tableView.dataSource = self
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -23,7 +28,9 @@ class MyStudiesViewController: UITableViewController {
         self.tableView.register(UINib(nibName: "MyStudyListViewCell", bundle: nil), forCellReuseIdentifier: "mystudylistcell")
         tableView.tableFooterView = UIView()
         myStudies = Syncer.sharedInstance.getAllStudyStructs()
-
+        
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -87,9 +94,29 @@ class MyStudiesViewController: UITableViewController {
         }else{
             cell.studyNameLabel.textColor = .black
         }
+        cell.isUserInteractionEnabled = true
+        
         return cell
+        
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+        print("Found here")
+        if let viewController = UIStoryboard(name: "Study", bundle: nil).instantiateViewController(withIdentifier: "openstudydetailsvc") as? OpenStudyDetailsViewController {
+               viewController.indexPathInList = indexPath
+               viewController.studyDetails = myStudies[indexPath.row]
+               //viewController.selectedNotification = object as! AppNotification
+               navigationController?.pushViewController(viewController, animated: true)
+               
+       }
+    }
+
+    
+    
+    
+    
+
+
 
     /*
     // Override to support conditional editing of the table view.
@@ -107,7 +134,7 @@ class MyStudiesViewController: UITableViewController {
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        }
     }
     */
 

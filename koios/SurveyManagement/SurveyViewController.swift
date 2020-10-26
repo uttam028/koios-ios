@@ -26,7 +26,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
         
         //clearAllResponses()
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Submit", style: .plain, target: self, action: #selector(submitForm))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Submit", style: .plain, target: self, action: #selector(submitClicked))
         
         taskList = Syncer.sharedInstance.getAllTasks(studyId: studyId, surveyId: surveyId)
 
@@ -354,8 +354,22 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
         self.present(alert, animated: true)
     }
     
+    @objc func submitClicked(){
+        let confirmAlert = UIAlertController(title: "Confirm", message: "Are you sure you want to submit the survey?", preferredStyle: UIAlertController.Style.alert)
+
+        confirmAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
+              print("Submission Confirmed")
+              self.submitForm()
+        }))
+
+        confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+              print("User cancelled submission")
+        }))
+
+        present(confirmAlert, animated: true, completion: nil)
+    }
     
-    @objc func submitForm(){
+    func submitForm(){
         
         var surveyResponses:[SurveyResponseStruct] = []
         for i in 0..<form.allSections.count{
