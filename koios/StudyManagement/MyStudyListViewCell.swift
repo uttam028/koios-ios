@@ -19,11 +19,11 @@ class MyStudyListViewCell: UITableViewCell {
         // Initialization code
         studyNameLabel.textColor = UIColor.black
         studyNameLabel.text = ""
-        studyNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        //studyNameLabel.translatesAutoresizingMaskIntoConstraints = false
 
         orgNameLabel.textColor = UIColor(red: 0.051, green: 0.1216, blue: 0.2118, alpha: 1.0) /* #0d1f36 */
         orgNameLabel.text = Utils.defaultOrganization
-//        orgNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        //orgNameLabel.translatesAutoresizingMaskIntoConstraints = false
 
     }
 

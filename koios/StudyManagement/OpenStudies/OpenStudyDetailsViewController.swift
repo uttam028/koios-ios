@@ -14,6 +14,7 @@ class OpenStudyDetailsViewController: UITableViewController {
 
     var indexPathInList:IndexPath!
     var studyDetails:StudyStruct!
+    var EnrollKey:String!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -29,7 +30,20 @@ class OpenStudyDetailsViewController: UITableViewController {
         self.tableView.estimatedRowHeight = 100
         tableView.tableFooterView = UIView()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Enroll", style: .plain, target: self, action: #selector(enrollToStudy))
+        EnrollKey = "enroll" + String(self.studyDetails.studyId)
+        
+        // reno - check if user has enrolled and create enroll/unenroll button
+        if let dateJoined = UserDefaults.standard.object(forKey: EnrollKey) {
+            
+            // UNCOMMENT THIS LINE WHEN THE BACKEND FOR UNENROLLMENT IS FINISHED
+            //navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Leave Study", style: .plain, target: self, action: #selector(leaveTapped))
+            
+            print("Not enrolled")
+            
+        }else{
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Enroll", style: .plain, target: self, action: #selector(enrollTapped))
+            print("Enrolled")
+        }
         
     }
 
@@ -38,7 +52,44 @@ class OpenStudyDetailsViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @objc func enrollToStudy(){
+
+    @objc func leaveTapped(){
+           let confirmAlert = UIAlertController(title: "Confirm", message: "Are you sure you want to leave this study?", preferredStyle: UIAlertController.Style.alert)
+
+           confirmAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
+                 print("Unenrollment Confirmed")
+                 self.unenrollToStudy()
+           }))
+
+           confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+                 print("User cancelled unenrollment")
+           }))
+
+           present(confirmAlert, animated: true, completion: nil)
+       }
+    
+    func unenrollToStudy(){
+        print("Beginning unenrollment in study")
+        
+        // implementation needs to be completed
+    }
+    
+    @objc func enrollTapped(){
+        let confirmAlert = UIAlertController(title: "Confirm", message: "Are you sure you want to enroll in this study?", preferredStyle: UIAlertController.Style.alert)
+
+        confirmAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
+              print("Enrollment Confirmed")
+              self.enrollToStudy()
+        }))
+
+        confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+              print("User cancelled enrollment")
+        }))
+
+        present(confirmAlert, animated: true, completion: nil)
+    }
+    
+    func enrollToStudy(){
         let email:String = Utils.getDataFromUserDefaults(key: "email") as! String
         let serviceUrl = Utils.getBaseUrl() + "study/enroll?email=\(email)&uuid=\(Utils.getDeviceIdentifier())&id=\(self.studyDetails.studyId)&jointime=\(Date().timeIntervalSince1970)&jointimezone=\(240)"
         Alamofire.request(serviceUrl).validate().responseJSON { response in
@@ -50,6 +101,9 @@ class OpenStudyDetailsViewController: UITableViewController {
                 if responseStruct.code == 0{
                     Syncer.sharedInstance.insertStudy(studyStruct: self.studyDetails)
                     let userInfo = [ "index" : self.indexPathInList, "studyName" : self.studyDetails.name, "studyId" : self.studyDetails.studyId ] as [String : Any]
+                    //reno - save current time as last survey response time
+                    let EnrollDateKey = "enroll" + String(self.studyDetails.studyId)
+                    UserDefaults.standard.set(Date(), forKey: String(EnrollDateKey))
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "enrolledtostudy"), object: nil, userInfo: userInfo)
                     self.navigationController?.popViewController(animated: true)
                 } else{
@@ -75,7 +129,7 @@ class OpenStudyDetailsViewController: UITableViewController {
         if section == 0 || section == 1 || section == 2{
             return 1
         }else{
-            return 3
+            return 1 // this should change if we add more additional inforamtion
         }
 
     }
@@ -86,7 +140,7 @@ class OpenStudyDetailsViewController: UITableViewController {
         }else if section == 2{
             return "Instructions"
         }else if section == 3{
-            return "Reviews"
+            return "Additional Information"
         }else{
             return ""
         }
@@ -137,9 +191,20 @@ class OpenStudyDetailsViewController: UITableViewController {
         } else{
             let cell = tableView.dequeueReusableCell(withIdentifier: "openstudydescriptioncell", for: indexPath) as! OpenStudyDescriptionViewCell
             
-            // Configure the cell...
-            print("section \(indexPath.section), row:\(indexPath.row)")
-            cell.descriptionLabel.text = "Review of participant \(indexPath.row)"
+            if indexPath.row == 0{
+                
+                print("section \(indexPath.section), row:\(indexPath.row)")
+                if let dateJoined = UserDefaults.standard.object(forKey: EnrollKey){
+                    let df = DateFormatter()
+                               df.dateFormat = "MM/dd/yyyy"
+                    cell.descriptionLabel.text = "Enrollment Status: Enrolled on \(df.string(from: dateJoined as! Date))"
+                
+                }else{
+                    cell.descriptionLabel.text = "Enrollment Status: Not Enrolled"
+                }
+                
+            }
+            
             return cell
 
         }

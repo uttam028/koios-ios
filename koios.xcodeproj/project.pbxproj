@@ -37,10 +37,8 @@
 		DD7A877024E05E3C00F46DB4 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7A876B24E05E3B00F46DB4 /* SignupViewController.swift */; };
 		DD7A877424E05F0A00F46DB4 /* Syncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7A877224E05F0A00F46DB4 /* Syncer.swift */; };
 		DD7A877524E05F0A00F46DB4 /* ViewDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7A877324E05F0A00F46DB4 /* ViewDataManager.swift */; };
-		DD7A877C24E05FD000F46DB4 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7A877724E05FD000F46DB4 /* SettingsViewController.swift */; };
 		DD7A877D24E05FD000F46DB4 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7A877824E05FD000F46DB4 /* ProfileViewController.swift */; };
 		DD7A877E24E05FD000F46DB4 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD7A877924E05FD000F46DB4 /* Settings.storyboard */; };
-		DD7A877F24E05FD000F46DB4 /* ProfileViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD7A877A24E05FD000F46DB4 /* ProfileViewCell.xib */; };
 		DD7A878024E05FD000F46DB4 /* ProfileViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7A877B24E05FD000F46DB4 /* ProfileViewCell.swift */; };
 		DD7A878324E06C6F00F46DB4 /* CustomCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7A878124E06C6F00F46DB4 /* CustomCells.swift */; };
 		DD7A878424E06C6F00F46DB4 /* FloatLabelTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7A878224E06C6F00F46DB4 /* FloatLabelTextField.swift */; };
@@ -131,10 +129,8 @@
 		DD7A876B24E05E3B00F46DB4 /* SignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
 		DD7A877224E05F0A00F46DB4 /* Syncer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Syncer.swift; sourceTree = "<group>"; };
 		DD7A877324E05F0A00F46DB4 /* ViewDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewDataManager.swift; sourceTree = "<group>"; };
-		DD7A877724E05FD000F46DB4 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		DD7A877824E05FD000F46DB4 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		DD7A877924E05FD000F46DB4 /* Settings.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
-		DD7A877A24E05FD000F46DB4 /* ProfileViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileViewCell.xib; sourceTree = "<group>"; };
 		DD7A877B24E05FD000F46DB4 /* ProfileViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewCell.swift; sourceTree = "<group>"; };
 		DD7A878124E06C6F00F46DB4 /* CustomCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCells.swift; sourceTree = "<group>"; };
 		DD7A878224E06C6F00F46DB4 /* FloatLabelTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatLabelTextField.swift; sourceTree = "<group>"; };
@@ -319,10 +315,8 @@
 			isa = PBXGroup;
 			children = (
 				DD7A877B24E05FD000F46DB4 /* ProfileViewCell.swift */,
-				DD7A877A24E05FD000F46DB4 /* ProfileViewCell.xib */,
 				DD7A877824E05FD000F46DB4 /* ProfileViewController.swift */,
 				DD7A877924E05FD000F46DB4 /* Settings.storyboard */,
-				DD7A877724E05FD000F46DB4 /* SettingsViewController.swift */,
 			);
 			path = SettingsManagement;
 			sourceTree = "<group>";
@@ -487,7 +481,6 @@
 				DD7A87A024E0DD4000F46DB4 /* OpenStudyBannerViewCell.xib in Resources */,
 				DD7A877E24E05FD000F46DB4 /* Settings.storyboard in Resources */,
 				DD4B130624DDB766004D19CB /* Main.storyboard in Resources */,
-				DD7A877F24E05FD000F46DB4 /* ProfileViewCell.xib in Resources */,
 				DD3E8B032505528C0062CF4A /* GoogleService-Info.plist in Resources */,
 				DD7A87B124E0DD6800F46DB4 /* NotificationViewCell.xib in Resources */,
 				DD7A87E424E0EDCE00F46DB4 /* Task.storyboard in Resources */,
@@ -525,7 +518,7 @@
 		};
 		DD4B132024DE79BA004D19CB /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
@@ -538,7 +531,7 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "${PODS_ROOT}/FirebaseCrashlytics/run\n";
 		};
@@ -590,7 +583,6 @@
 				DD7A87CF24E0DD9900F46DB4 /* MZTimerLabel.m in Sources */,
 				DD4B130924DDB766004D19CB /* koios.xcdatamodeld in Sources */,
 				DD7A875424E05A6700F46DB4 /* ActiveSurveysViewCell.swift in Sources */,
-				DD7A877C24E05FD000F46DB4 /* SettingsViewController.swift in Sources */,
 				DD7A876224E05A9D00F46DB4 /* CommonStruct.swift in Sources */,
 				DD7A879E24E0DD4000F46DB4 /* OpenStudyBannerViewCell.swift in Sources */,
 				DD7A87AF24E0DD6800F46DB4 /* NotificationDetailsViewController.swift in Sources */,

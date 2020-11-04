@@ -78,18 +78,18 @@ class RecordingController: UIViewController, AVAudioRecorderDelegate, AVAudioPla
         
         recordInstructions = UILabel()
         let w = UIScreen.main.bounds.width
-        recordInstructions.frame = CGRect(x: w/2, y: 500, width: 500, height: 20)
-        recordInstructions.center = CGPoint(x: w/2, y: 500)
+        let h = UIScreen.main.bounds.height
+        recordInstructions.frame = CGRect(x: w/2, y: 5/9 * h, width: 500, height: 20)
+        recordInstructions.center = CGPoint(x: w/2, y: 5/9 * h)
         recordInstructions.textAlignment = .center
         
         uploadInstructions = UILabel()
-        uploadInstructions.frame = CGRect(x: w/2, y: 200, width: 500, height: 20)
-        uploadInstructions.center = CGPoint(x: w/2, y: 200)
+        uploadInstructions.frame = CGRect(x: w/2, y: 2 * h/9, width: 500, height: 20)
+        uploadInstructions.center = CGPoint(x: w/2, y: 2 * h/9)
         uploadInstructions.textAlignment = .center
         
-        recordButton.frame = CGRect(x: 50, y: 300, width: 100, height: 30)
-        playButton.frame = CGRect(x: 225, y: 300, width: 100, height: 30)
-//        uploadButton.frame = CGRect(x: 135, y: 400, width: 100, height: 20)
+        recordButton.frame = CGRect(x: w / 4.2, y: h/3, width: 60, height: 60)
+        playButton.frame = CGRect(x: 2.6 * w / 4, y: h/3, width: 60, height: 60)
         
         
         self.view.addSubview(recordInstructions)
@@ -135,23 +135,15 @@ class RecordingController: UIViewController, AVAudioRecorderDelegate, AVAudioPla
     func playRecordingUI(){
         self.view.addSubview(playButton)
         playButton.addTarget(self, action: #selector(playTapped), for: .touchUpInside)
-        if #available(iOS 13.0, *) {
-            playButton.setImage(UIImage(systemName:"play.fill"), for: .normal)
-        }
-        else{
-            playButton.setTitle("Play", for: .normal)
-        }
+        playButton.setImage(UIImage(named: "play"), for: .normal)
+        
     }
     
     func loadRecordingUI() {
         self.view.addSubview(recordButton)
         recordButton.addTarget(self, action: #selector(recordTapped), for: .touchUpInside)
         recordInstructions.text = "Click on the microphone to begin recording"
-        if #available(iOS 13.0, *) {
-            recordButton.setImage(UIImage(systemName:"mic"), for: .normal)
-        } else {
-            recordButton.setTitle("Record", for: .normal)
-        }
+        recordButton.setImage(UIImage(named: "mic"), for: .normal)
     }
     
     func startRecording(_ sender: UIButton) {
@@ -176,11 +168,7 @@ class RecordingController: UIViewController, AVAudioRecorderDelegate, AVAudioPla
                 audioRecorder.record()
                 recording = true
                 recordInstructions.text = "Click the stop button to stop recording"
-                if #available(iOS 13.0, *) {
-                    recordButton.setImage(UIImage(systemName:"stop.fill"), for: .normal)
-                } else {
-                    recordButton.setTitle("Stop", for: .normal)
-                }
+                recordButton.setImage(UIImage(named: "stop"), for: .normal)
             } catch {
                 finishRecording()
             }
@@ -200,22 +188,14 @@ class RecordingController: UIViewController, AVAudioRecorderDelegate, AVAudioPla
         uploadInstructions.text = "Click upload to submit the file"
         uploadInstructions.isHidden = false
         self.navigationItem.rightBarButtonItem = uploadBarButton
-        if #available(iOS 13.0, *) {
-            recordButton.setImage(UIImage(systemName:"mic"), for: .normal)
-        } else {
-            recordButton.setTitle("Record", for: .normal)
-        }
+        recordButton.setImage(UIImage(named: "mic"), for: .normal)
         
     }
     
     func finishedPlaying(){
         audioPlayer.stop()
         playingRecording = false
-        if #available(iOS 13.0, *) {
-            playButton.setImage(UIImage(systemName:"play.fill"), for: .normal)
-        } else {
-            playButton.setTitle("Play", for: .normal)
-        }
+        playButton.setImage(UIImage(named: "play"), for: .normal)
         
     }
     
@@ -229,11 +209,7 @@ class RecordingController: UIViewController, AVAudioRecorderDelegate, AVAudioPla
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         playingRecording = false
-        if #available(iOS 13.0, *) {
-            playButton.setImage(UIImage(systemName:"play.fill"), for: .normal)
-        } else {
-            playButton.setTitle("Play", for: .normal)
-        }
+        playButton.setImage(UIImage(named: "play"), for: .normal)
         
     }
     
@@ -245,11 +221,7 @@ class RecordingController: UIViewController, AVAudioRecorderDelegate, AVAudioPla
                     audioPlayer.delegate = self
                     audioPlayer.volume = 1.0
                     playingRecording = true
-                    if #available(iOS 13.0, *) {
-                        playButton.setImage(UIImage(systemName:"pause"), for: .normal)
-                    } else {
-                        playButton.setTitle("Pause", for: .normal)
-                    }
+                    playButton.setImage(UIImage(named: "pause"), for: .normal)
                     
                     audioPlayer.play()
                 }
@@ -258,19 +230,30 @@ class RecordingController: UIViewController, AVAudioRecorderDelegate, AVAudioPla
             } else{
                 audioPlayer.stop()
                 playingRecording = false
-                if #available(iOS 13.0, *) {
-                    playButton.setImage(UIImage(systemName:"play.fill"), for: .normal)
-                } else {
-                    playButton.setTitle("Play", for: .normal)
-                    
-                }
+                playButton.setImage(UIImage(named: "play"), for: .normal)
             }
         }
     }
     
     
     @objc func uploadTapped(_ sender: UIButton){
+        let confirmAlert = UIAlertController(title: "Confirm", message: "Are you sure you want to upload the recording?", preferredStyle: UIAlertController.Style.alert)
+
+               confirmAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
+                     print("Submission Confirmed")
+                     self.uploadRecording()
+               }))
+
+               confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+                     print("User cancelled submission")
+               }))
+
+               present(confirmAlert, animated: true, completion: nil)
+    }
+    
+    func uploadRecording(){
         // upload file
+        print("Called upload recording")
         if !recording && !playingRecording && recordedAlready{
             
             let parameters = ["contentType":"multipart/form-data"]
@@ -314,4 +297,3 @@ class RecordingController: UIViewController, AVAudioRecorderDelegate, AVAudioPla
     }
     
 }
-

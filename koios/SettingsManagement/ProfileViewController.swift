@@ -154,6 +154,10 @@ class ProfileViewController: FormViewController {
                 }else{
                     row.placeholder = "Enter Text Here"
                 }
+            }
+        <<< LabelRow(){ row in
+            row.title = "Version"
+            row.value = Bundle.main.infoDictionary!["CFBundleShortVersionString"]! as! Cell<String>.Value
         }
         
     }
@@ -231,6 +235,10 @@ class ProfileViewController: FormViewController {
                     let key:String = "device_model_number"
                     Utils.saveDataToUserDefaults(data: deviceNum, key: key)
                     profileDict[key] = deviceNum
+                }
+                else if title.lowercased().hasPrefix("version"){
+                    let versionRow = form.rows[i] as! LabelRow
+                    let version = Bundle.main.infoDictionary!["CFBundleShortVersionString"]!
                 }
             }
         }
