@@ -12,6 +12,7 @@ target 'koios' do
   pod 'Firebase/Messaging'
   pod 'Firebase/Crashlytics'
   pod 'Alamofire', '~> 4.5'
-  pod 'Eureka', '~> 5.2'
+  #pod 'Eureka', '~> 5.2'
+  pod 'Eureka'
   pod 'SwiftyJSON', '~> 4.0'
 end
