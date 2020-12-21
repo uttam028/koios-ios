@@ -15,4 +15,5 @@ target 'koios' do
   #pod 'Eureka', '~> 5.2'
   pod 'Eureka'
   pod 'SwiftyJSON', '~> 4.0'
+  pod 'ResearchKit', '~> 2.0'
 end

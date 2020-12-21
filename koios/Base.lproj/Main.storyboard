@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="NxR-mG-69j">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="NxR-mG-69j">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -27,7 +27,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9gm-0f-UHT">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9gm-0f-UHT">
                                 <rect key="frame" x="155" y="478" width="104" height="42"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
                                 <state key="normal" title="Continue">
@@ -38,12 +38,13 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Invalid Email" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EIX-Q0-hbm">
-                                <rect key="frame" x="144.5" y="353.5" width="125" height="26"/>
+                                <rect key="frame" x="145" y="353.5" width="124" height="26"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
                                 <color key="textColor" red="1" green="0.1044069087" blue="0.15611255979999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="rl3-Im-CQp"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Ee4-rr-RtR" firstAttribute="top" secondItem="EIX-Q0-hbm" secondAttribute="bottom" constant="56" id="5lG-Vh-zHD"/>
@@ -54,7 +55,6 @@
                             <constraint firstItem="EIX-Q0-hbm" firstAttribute="centerX" secondItem="rl3-Im-CQp" secondAttribute="centerX" id="qH4-bR-lqU"/>
                             <constraint firstItem="9gm-0f-UHT" firstAttribute="top" secondItem="Ee4-rr-RtR" secondAttribute="bottom" constant="17" id="sJD-nw-nJx"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="rl3-Im-CQp"/>
                     </view>
                     <connections>
                         <outlet property="continueButton" destination="9gm-0f-UHT" id="My4-15-4Zc"/>
@@ -74,8 +74,8 @@
                     <view key="view" contentMode="scaleToFill" id="8qN-gf-RFT">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="S8d-iI-pRV"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Profile" id="IYx-Mg-F0h">
@@ -126,7 +126,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zzb-0s-0do">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zzb-0s-0do">
                                 <rect key="frame" x="164" y="496" width="86" height="42"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
                                 <state key="normal" title="Resend">
@@ -160,8 +160,8 @@
                                 <color key="textColor" red="1" green="0.1044069087" blue="0.15611255979999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gna-fi-OPo">
-                                <rect key="frame" x="95" y="685" width="224" height="39"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gna-fi-OPo">
+                                <rect key="frame" x="94.5" y="685" width="225" height="39"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
                                 <state key="normal" title="     Try Another Email     ">
                                     <color key="titleColor" red="0.88235294119999996" green="0.70588235290000001" blue="0.1647058824" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -171,6 +171,7 @@
                                 </connections>
                             </button>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="EVv-gV-htK"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="MOf-eH-xbu" firstAttribute="centerX" secondItem="QE9-mn-IeC" secondAttribute="centerX" id="0TR-Gp-Vzv"/>
@@ -186,11 +187,10 @@
                             <constraint firstItem="oSV-pn-c1a" firstAttribute="centerX" secondItem="EVv-gV-htK" secondAttribute="centerX" constant="1" id="u7r-ec-BR6"/>
                             <constraint firstItem="EVv-gV-htK" firstAttribute="trailing" secondItem="MOf-eH-xbu" secondAttribute="trailing" constant="34" id="uaL-5o-iPV"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="EVv-gV-htK"/>
                     </view>
                     <navigationItem key="navigationItem" id="Mc1-iG-5tQ">
                         <barButtonItem key="leftBarButtonItem" style="plain" id="Q60-Z3-cgy">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="LOw-Qs-Bzg">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="LOw-Qs-Bzg">
                                 <rect key="frame" x="16" y="7" width="83" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="&lt; Back"/>
@@ -200,7 +200,7 @@
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="Q24-XZ-K4e">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="tPF-yH-vsk">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="tPF-yH-vsk">
                                 <rect key="frame" x="221" y="7" width="83" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Resend"/>

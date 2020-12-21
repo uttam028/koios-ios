@@ -3,11 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		670E4C8B54FBF8E33BA40030 /* libPods-koios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AA4F4B1A61A7843C2FF60C0 /* libPods-koios.a */; };
+		59B2A038691756B20E003720 /* libPods-koios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2431E0D55377FD506570C9F9 /* libPods-koios.a */; };
 		DD399AB82524E97800DB1B8B /* RecordingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD399AB72524E97800DB1B8B /* RecordingController.swift */; };
 		DD3E8B032505528C0062CF4A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DD3E8B022505528C0062CF4A /* GoogleService-Info.plist */; };
 		DD4B12FF24DDB766004D19CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4B12FE24DDB766004D19CB /* AppDelegate.swift */; };
@@ -15,7 +15,6 @@
 		DD4B130324DDB766004D19CB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4B130224DDB766004D19CB /* ViewController.swift */; };
 		DD4B130624DDB766004D19CB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD4B130424DDB766004D19CB /* Main.storyboard */; };
 		DD4B130924DDB766004D19CB /* koios.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DD4B130724DDB766004D19CB /* koios.xcdatamodeld */; };
-		DD4B130B24DDB76B004D19CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD4B130A24DDB76B004D19CB /* Assets.xcassets */; };
 		DD4B130E24DDB76B004D19CB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD4B130C24DDB76B004D19CB /* LaunchScreen.storyboard */; };
 		DD7A874B24E05A3800F46DB4 /* KeepAliveByLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7A874924E05A3700F46DB4 /* KeepAliveByLocationManager.swift */; };
 		DD7A874C24E05A3800F46DB4 /* SensorDataCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7A874A24E05A3700F46DB4 /* SensorDataCollector.swift */; };
@@ -88,12 +87,13 @@
 		DD7A87E624E0EDCE00F46DB4 /* MotorTaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7A87DE24E0EDCE00F46DB4 /* MotorTaskCell.swift */; };
 		DD7A87E724E0EDCE00F46DB4 /* ActiveTasksGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7A87DF24E0EDCE00F46DB4 /* ActiveTasksGroupViewController.swift */; };
 		DD7A87E824E0EDCE00F46DB4 /* ActiveTasksViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7A87E024E0EDCE00F46DB4 /* ActiveTasksViewCell.swift */; };
+		DD934CB325664A2D0065321C /* ConsentManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD934CB225664A2D0065321C /* ConsentManagement.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		53AC7F6B44D32A3A3D863072 /* Pods-koios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koios.debug.xcconfig"; path = "Target Support Files/Pods-koios/Pods-koios.debug.xcconfig"; sourceTree = "<group>"; };
-		8280D6C22012822B34BD9F6A /* Pods-koios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koios.release.xcconfig"; path = "Target Support Files/Pods-koios/Pods-koios.release.xcconfig"; sourceTree = "<group>"; };
-		9AA4F4B1A61A7843C2FF60C0 /* libPods-koios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-koios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2431E0D55377FD506570C9F9 /* libPods-koios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-koios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		73869C27B82034E297420C59 /* Pods-koios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koios.release.xcconfig"; path = "Target Support Files/Pods-koios/Pods-koios.release.xcconfig"; sourceTree = "<group>"; };
+		917CF28ECA065061786CCAED /* Pods-koios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koios.debug.xcconfig"; path = "Target Support Files/Pods-koios/Pods-koios.debug.xcconfig"; sourceTree = "<group>"; };
 		DD0128762509F5D60029D5C3 /* koios v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "koios v2.xcdatamodel"; sourceTree = "<group>"; };
 		DD399AB72524E97800DB1B8B /* RecordingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingController.swift; sourceTree = "<group>"; };
 		DD3E8B022505528C0062CF4A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -182,6 +182,7 @@
 		DD7A87DE24E0EDCE00F46DB4 /* MotorTaskCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotorTaskCell.swift; sourceTree = "<group>"; };
 		DD7A87DF24E0EDCE00F46DB4 /* ActiveTasksGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveTasksGroupViewController.swift; sourceTree = "<group>"; };
 		DD7A87E024E0EDCE00F46DB4 /* ActiveTasksViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveTasksViewCell.swift; sourceTree = "<group>"; };
+		DD934CB225664A2D0065321C /* ConsentManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsentManagement.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,28 +190,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				670E4C8B54FBF8E33BA40030 /* libPods-koios.a in Frameworks */,
+				59B2A038691756B20E003720 /* libPods-koios.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		02CA277FE93BA9143F0E9C7E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2431E0D55377FD506570C9F9 /* libPods-koios.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A74ABADC2F2F6F65F96DDA44 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				53AC7F6B44D32A3A3D863072 /* Pods-koios.debug.xcconfig */,
-				8280D6C22012822B34BD9F6A /* Pods-koios.release.xcconfig */,
+				917CF28ECA065061786CCAED /* Pods-koios.debug.xcconfig */,
+				73869C27B82034E297420C59 /* Pods-koios.release.xcconfig */,
 			);
 			path = Pods;
-			sourceTree = "<group>";
-		};
-		B209C5CD6E5ABA1A2784F3D0 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				9AA4F4B1A61A7843C2FF60C0 /* libPods-koios.a */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		DD4B12F224DDB766004D19CB = {
@@ -220,7 +221,7 @@
 				DD4B12FD24DDB766004D19CB /* koios */,
 				DD4B12FC24DDB766004D19CB /* Products */,
 				A74ABADC2F2F6F65F96DDA44 /* Pods */,
-				B209C5CD6E5ABA1A2784F3D0 /* Frameworks */,
+				02CA277FE93BA9143F0E9C7E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -347,6 +348,7 @@
 				DD7A879024E0DD4000F46DB4 /* OpenStudiesViewController.swift */,
 				DD7A879124E0DD4000F46DB4 /* OpenStudyBannerViewCell.xib */,
 				DD7A879224E0DD4000F46DB4 /* OpenStudyDescriptionViewCell.swift */,
+				DD934CB225664A2D0065321C /* ConsentManagement.swift */,
 			);
 			path = OpenStudies;
 			sourceTree = "<group>";
@@ -419,11 +421,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DD4B131224DDB76B004D19CB /* Build configuration list for PBXNativeTarget "koios" */;
 			buildPhases = (
-				58E9162234E3060D31AAB9D0 /* [CP] Check Pods Manifest.lock */,
+				3E1EDBA8BBC4C4EB0AD95087 /* [CP] Check Pods Manifest.lock */,
 				DD4B12F724DDB766004D19CB /* Sources */,
 				DD4B12F824DDB766004D19CB /* Frameworks */,
 				DD4B12F924DDB766004D19CB /* Resources */,
 				DD4B132024DE79BA004D19CB /* ShellScript */,
+				961099A631D192A8392570CC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -475,7 +478,6 @@
 			files = (
 				DD7A87E124E0EDCE00F46DB4 /* MotorTaskCell.xib in Resources */,
 				DD4B130E24DDB76B004D19CB /* LaunchScreen.storyboard in Resources */,
-				DD4B130B24DDB76B004D19CB /* Assets.xcassets in Resources */,
 				DD7A87D624E0DED600F46DB4 /* Home.storyboard in Resources */,
 				DD7A875224E05A6700F46DB4 /* Survey.storyboard in Resources */,
 				DD7A87A024E0DD4000F46DB4 /* OpenStudyBannerViewCell.xib in Resources */,
@@ -494,7 +496,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		58E9162234E3060D31AAB9D0 /* [CP] Check Pods Manifest.lock */ = {
+		3E1EDBA8BBC4C4EB0AD95087 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -514,6 +516,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		961099A631D192A8392570CC /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-koios/Pods-koios-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-koios/Pods-koios-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-koios/Pods-koios-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DD4B132024DE79BA004D19CB /* ShellScript */ = {
@@ -607,6 +626,7 @@
 				DD7A87E724E0EDCE00F46DB4 /* ActiveTasksGroupViewController.swift in Sources */,
 				DD7A874C24E05A3800F46DB4 /* SensorDataCollector.swift in Sources */,
 				DD7A879D24E0DD4000F46DB4 /* OpenStudyDetailsViewController.swift in Sources */,
+				DD934CB325664A2D0065321C /* ConsentManagement.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -748,7 +768,7 @@
 		};
 		DD4B131324DDB76B004D19CB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 53AC7F6B44D32A3A3D863072 /* Pods-koios.debug.xcconfig */;
+			baseConfigurationReference = 917CF28ECA065061786CCAED /* Pods-koios.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -768,6 +788,7 @@
 				OTHER_LDFLAGS = (
 					"$(OTHER_LDFLAGS)",
 					"-ObjC",
+					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = edu.nd.mlab.koios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -780,7 +801,7 @@
 		};
 		DD4B131424DDB76B004D19CB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8280D6C22012822B34BD9F6A /* Pods-koios.release.xcconfig */;
+			baseConfigurationReference = 73869C27B82034E297420C59 /* Pods-koios.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -799,6 +820,7 @@
 				OTHER_LDFLAGS = (
 					"$(OTHER_LDFLAGS)",
 					"-ObjC",
+					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = edu.nd.mlab.koios;
 				PRODUCT_NAME = "$(TARGET_NAME)";

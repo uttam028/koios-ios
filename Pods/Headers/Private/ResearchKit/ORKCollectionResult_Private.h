@@ -1,0 +1,1 @@
+../../../ResearchKit/ResearchKit/Common/ORKCollectionResult_Private.h

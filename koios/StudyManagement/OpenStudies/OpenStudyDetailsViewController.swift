@@ -9,12 +9,15 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import ResearchKit
 
 class OpenStudyDetailsViewController: UITableViewController {
 
     var indexPathInList:IndexPath!
     var studyDetails:StudyStruct!
     var EnrollKey:String!
+    var sectionList:[ConsentSectionStruct] = [ConsentSectionStruct]()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -75,6 +78,68 @@ class OpenStudyDetailsViewController: UITableViewController {
     }
     
     @objc func enrollTapped(){
+        
+        let studyId = self.studyDetails.studyId
+        var serviceUrl = Utils.getBaseUrl() + "consent/required?study_id=\(studyId)"
+        Alamofire.request(serviceUrl, headers: headers).validate().responseJSON { response in
+            switch response.result {
+            case .success:
+                let json = JSON(response.result.value as Any)
+                let responseStruct = Response.responseFromJSONData(jsonData: json)
+                print("response after object : \(responseStruct.code), \(responseStruct.message), \(serviceUrl)")
+                if responseStruct.code == 1{
+                    // 1 - required
+                    serviceUrl = Utils.getBaseUrl() + "consent/template?study_id=\(studyId)"
+                    Alamofire.request(serviceUrl, headers: headers).validate().responseJSON { response in
+                        switch response.result {
+                        case .success:
+                            let sectionJson = JSON(response.result.value as Any)
+                            print("response after object : \(sectionJson), \(serviceUrl)")
+                            self.sectionList = [ConsentSectionStruct]()
+                            for item in sectionJson.arrayValue{
+                                self.sectionList.append(ConsentSectionStruct.responseFromJSONData(jsonData: item))
+                            }
+                            DispatchQueue.main.async {
+                                let viewController = self.getConsentController(sectionList: self.sectionList)
+                                self.present(viewController, animated: true, completion: nil)
+                            }
+                        case .failure(let error):
+                            print("error in ping: \(error.localizedDescription)")
+                        }
+                    }
+                    
+                } else if responseStruct.code==0{
+                    //0 - not required
+                    DispatchQueue.main.async {
+                        self.popupConfirmation()
+                    }
+                } else{
+                    //-1 - error, should not proceed
+                    DispatchQueue.main.async {
+                        self.popupError()
+                    }
+                }
+            case .failure(let error):
+                print("error in ping: \(error.localizedDescription)")
+            }
+        }
+        
+    }
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle
+    {
+        return .none
+    }
+    
+    func popupError(){
+        let confirmAlert = UIAlertController(title: "Error", message: "Service is not available, please try later.", preferredStyle: UIAlertController.Style.alert)
+
+        confirmAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+              print("Error occured")
+        }))
+        present(confirmAlert, animated: true, completion: nil)
+    }
+    
+    func popupConfirmation(){
         let confirmAlert = UIAlertController(title: "Confirm", message: "Are you sure you want to enroll in this study?", preferredStyle: UIAlertController.Style.alert)
 
         confirmAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
@@ -211,4 +276,95 @@ class OpenStudyDetailsViewController: UITableViewController {
 
     }
 
+}
+
+
+extension OpenStudyDetailsViewController:ORKTaskViewControllerDelegate, UIPopoverPresentationControllerDelegate{
+//    func taskViewController(_ taskViewController: ORKTaskViewController, didFinishWith reason: ORKTaskViewControllerFinishReason, error: Error?) {
+//        <#code#>
+//    }
+    
+    private func getConsentController(sectionList:[ConsentSectionStruct])->ORKTaskViewController{
+        let taskViewController = ORKTaskViewController(task: ConsentGenerator.getConsentTask(listOfSections: sectionList), taskRun: nil)
+        
+        taskViewController.delegate = self
+        
+        taskViewController.view.tintColor = UIColor(red: 0.8824, green: 0.7059, blue: 0.1647, alpha: 1.0) /* #gold */
+        //taskViewController.view.tintColor = UIColor(red: 0.051, green: 0.1216, blue: 0.2118, alpha: 1.0)/* #blue */
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.window?.tintColor = UIColor(red: 0.051, green: 0.1216, blue: 0.2118, alpha: 1.0)/* #blue */
+//        taskViewController.modalPresentationStyle = .popover
+        taskViewController.modalPresentationStyle = .overFullScreen
+        return taskViewController
+        
+    }
+    
+    func taskViewController(_ taskViewController: ORKTaskViewController, didFinishWith reason: ORKTaskViewControllerFinishReason, error: Error?) {
+        switch reason {
+        
+        case .completed:
+            print("result completed")
+            let result = taskViewController.result
+            if let stepResult = result.stepResult(forStepIdentifier: "ConsentReviewStep"), let signatureResult = stepResult.results?.first as? ORKConsentSignatureResult{
+                
+                
+                if signatureResult.consented{
+                    //                    Utils.saveDataToUserDefaults(data: signatureResult.signature?.givenName, key: "firstname")
+                    //                    Utils.saveDataToUserDefaults(data: signatureResult.signature?.familyName, key: "lastname")
+                    Utils.saveDataToUserDefaults(data: "consented", key: "userstate")
+                    //                    let nextViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tempprofilevc") as! UINavigationController
+                    let nextViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ApplicationStory")
+                    
+                    
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    //show window
+                    appDelegate.window?.rootViewController = nextViewController
+                    
+                }else{
+                    taskViewController.dismiss(animated: true, completion: nil)
+                    //                    self.tableView.reloadData()
+                }
+                
+                print("sign result \(String(describing: signatureResult.signature?.familyName)), \(String(describing: signatureResult.signature?.givenName)), title: \(signatureResult.signature?.title)")
+                let document = ConsentGenerator.getConsentDocument(listOfSections: self.sectionList).copy() as! ORKConsentDocument
+                 signatureResult.apply(to: document)
+                 
+                 
+                document.makePDF { (pdfFile, error) -> Void in
+
+                    var docURL = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)).last as URL?
+                    docURL = docURL?.appendingPathComponent( "consent.pdf") as URL?
+                    print("doc urL:\(String(describing: docURL))")
+
+                    do{
+                        //write your file to the disk.
+                        try pdfFile?.write(to: docURL!)
+                        //now you can see that pdf in your applications directory
+
+                    }catch{
+                        
+                    }
+                }
+                
+//                 consentDocument.makePDF { (data, error) -> Void in
+//                    let tempPath = NSTemporaryDirectory() as NSString
+//                    let path = tempPath.appendingPathComponent("signature.pdf")
+//                    data?.write(to: URL(string: path)!, options: Data.WritingOptions.atomic)
+//                    print("file path \(path)")
+//                 }
+//
+            }
+            
+        default:
+            print("cancel steps")
+            taskViewController.dismiss(animated: true, completion: nil)
+            //            self.tableView.reloadData()
+        }
+        
+        print("did finish with \(reason.rawValue), \(taskViewController.result.stepResult(forStepIdentifier:"ConsentTask" ))")
+        
+    }
+
+    
+    
 }
