@@ -17,6 +17,8 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
     var surveyId:Int32 = 0
     var version:Int16 = 0
     
+    let queueLimit = 3
+    
     var taskList:[Task] = []
     var surveyResponse:[SurveyResponse] = []
     var fileResponseDict = Dictionary<String, String>()
@@ -503,6 +505,42 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
         //reno - save current time as last survey response time
         UserDefaults.standard.set(Date(), forKey: String(surveyId))
         
+        
+        // if event survey or follow-up update last3responses queue
+        if(surveyId==23 || surveyId == 22){
+            
+            // check if null or not
+            if var last3responses = UserDefaults.standard.array(forKey: String(surveyId) + "-last3responses") {
+                
+                // last 3 responses is full (reached queueLimit), remove oldest and add newest
+                if (last3responses.count == queueLimit){
+                    print("reached limit")
+                    
+                    // remove oldest response, add newest
+                    last3responses.removeLast()
+                    last3responses.insert(Date(), at: 0)
+                    
+                    UserDefaults.standard.set(last3responses, forKey: String(surveyId) + "-last3responses")
+                }
+                    
+                // last3responses has room for another date so add to it
+                else{
+                    print("room open")
+                    last3responses.insert(Date(), at: 0)
+                    UserDefaults.standard.set(last3responses, forKey: String(surveyId) + "-last3responses")
+                }
+            }
+                
+            // last3responses is null, so create queue with current date and time
+            else{
+                print("was null")
+                let last3responses = [Date()]
+                UserDefaults.standard.set(last3responses, forKey: String(surveyId) + "-last3responses")
+            }
+            
+        }
+        
+                
         self.navigationController?.popViewController(animated: true)
         
     }

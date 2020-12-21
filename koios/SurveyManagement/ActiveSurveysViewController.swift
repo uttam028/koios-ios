@@ -146,6 +146,10 @@ class ActiveSurveysViewController: UITableViewController, NSFetchedResultsContro
 //        cell.descLabel.text = (object as! Survey).studyName
         
 //        reno - special changes for first responder study
+        
+        
+        // INITIALIZE DIFFERENCE IN DAYS TO -1 SO THAT ALL SURVEYS ARE INITIALLY RED
+        var differenceInDays = -1
         if let date = UserDefaults.standard.object(forKey: String((object as! Survey).surveyId))
         {
             let df = DateFormatter()
@@ -153,7 +157,7 @@ class ActiveSurveysViewController: UITableViewController, NSFetchedResultsContro
             print("heres", df.string(from: date as! Date))
             let current = Date()
             let differenceInSeconds = Int(current.timeIntervalSince(date as! Date))
-            let differenceInDays = Int(differenceInSeconds / (60 * 60 * 24));
+            differenceInDays = Int(differenceInSeconds / (60 * 60 * 24));
             cell.nameLabel.text = "Completed: \(differenceInDays) day(s) ago"
             print("surveyName: \((object as! Survey).name), \((object as! Survey).surveyId)  \((object as! Survey).scheduleCode)")
             
@@ -166,48 +170,113 @@ class ActiveSurveysViewController: UITableViewController, NSFetchedResultsContro
             else if differenceInDays == 0{
                 cell.nameLabel.text = "Completed today"
             }
-            switch (object as! Survey).scheduleCode {
-            case "always":
-                
-                // NOTE: Special case only for First Responder Emotion Study
-                if (object as! Survey).surveyId == 22{ // dealing with follow-up
-                    if let eventSurveyDate = UserDefaults.standard.object(forKey: "23") // get info on last time event survey was taken
-                    {
-                        let dfEventSurvey = DateFormatter()
-                        dfEventSurvey.dateFormat = "dd/MM/yyyy HH:mm"
-                        let differenceInSecondsEventSurvey = Int(current.timeIntervalSince(eventSurveyDate as! Date))
-                        let differenceInDaysEventSurvey = Int(differenceInSecondsEventSurvey / (60 * 60 * 24));
-                        
-                        if differenceInDaysEventSurvey > 0 && differenceInDaysEventSurvey < 3 && differenceInSecondsEventSurvey < differenceInSeconds{
-                            cell.nameLabel.textColor = .red
-                        }
-                        else{
-                            cell.nameLabel.textColor = .black
-                        }
-                    }
-                    
-                }
-            case "weekly":
-                if differenceInDays >= 7{
-                    cell.nameLabel.textColor = .red
-                }
-            case "monthly":
-                if differenceInDays >= 31{
-                    cell.nameLabel.textColor = .red
-                }
-            default:
-                cell.nameLabel.textColor = .black
-            }
         }
         else{
             print("Nothing yet")
             cell.nameLabel.text = "Not completed yet"
             
+        }
+        
+        switch (object as! Survey).scheduleCode {
+        case "always":
+
             // NOTE: Special case only for First Responder Emotion Study
-            if (object as! Survey).surveyId != 22 && (object as! Survey).surveyId != 23{
+            if (object as! Survey).surveyId == 22{ // dealing with follow-up
+    
+                // initialize text as black
+                cell.nameLabel.textColor = .black
+                
+                
+                var last3EventsCopy:[Any] = []
+                // see if any event surveys have been completed
+                if let last3Events = UserDefaults.standard.array(forKey: "23-last3responses"){ // get info on last time event survey was taken
+                    
+                    
+                    last3EventsCopy = last3Events
+                    
+                    
+                    // Determine if Follow-Up has been completed
+                    var last3FollowUpsCopy:[Any] = []
+                    if let last3FollowUps = UserDefaults.standard.array(forKey: "22-last3responses"){
+                        last3FollowUpsCopy = last3FollowUps
+                        
+                    }
+                    // no follow-up has been completed --> turn red
+                    else{
+                        cell.nameLabel.textColor = .red
+                        break
+                    }
+                    
+                    // for all responses in last3Events, mark them off with a follow-up
+                    while !last3EventsCopy.isEmpty{
+                        
+                        // pop Event Survey from array
+                        let event = last3EventsCopy.popLast()
+                        let df = DateFormatter()
+                        df.dateFormat = "dd/MM/yyyy HH:mm"
+                        print("in queue", df.string(from: event as! Date))
+                        let current = Date()
+                        let differenceInSecondsEventSurvey = Int(current.timeIntervalSince(event as! Date))
+                        let differenceInDaysEventSurvey = Int(differenceInSecondsEventSurvey / (60 * 60 * 24));
+                        
+                        // pop Follow-Up survey if possible, if not possible make text red
+                        let followUp = last3FollowUpsCopy.popLast()
+                        
+                        
+                        if followUp == nil{
+                            cell.nameLabel.textColor = .red // no follow-up to match
+                            break
+                        }
+                        else{
+                            
+                            // get info on Event Survey
+                            let df2 = DateFormatter()
+                            df2.dateFormat = "dd/MM/yyyy HH:mm"
+                            print("in queue", df2.string(from: followUp as! Date))
+                            let current2 = Date()
+                            let differenceInSecondsFollowUpSurvey = Int(current2.timeIntervalSince(followUp as! Date))
+                            let differenceInDaysFollowUpSurvey = Int(differenceInSecondsFollowUpSurvey / (60 * 60 * 24));
+                            
+                               
+                            // if follow-up cannot account for event, make text red
+                            if differenceInDaysEventSurvey > 0 && differenceInDaysEventSurvey < 3 &&
+                                differenceInSecondsEventSurvey < differenceInSecondsFollowUpSurvey{
+                                cell.nameLabel.textColor = .red
+                                break
+                            }
+                            else{
+                                cell.nameLabel.textColor = .black // accounted for
+                                
+                            }
+                        }
+                       
+                        
+                    }
+                
+                }
+                    
+                // no event surveys have been completed, remain black
+                else{
+                    cell.nameLabel.textColor = .black
+                }
+
+                
+            }
+        case "once":
+            if differenceInDays == -1 {
                 cell.nameLabel.textColor = .red
             }
-
+        case let str where str!.contains("weekly"):
+            if differenceInDays >= 7 || differenceInDays == -1{
+                cell.nameLabel.textColor = .red
+            }
+        case let str where str!.contains("monthly"):
+            if differenceInDays >= 31 || differenceInDays == -1{
+                cell.nameLabel.textColor = .red
+            }
+        default:
+            cell.nameLabel.textColor = .black
+            print(((object as! Survey).scheduleCode))
         }
         
         cell.descLabel.text = (object as! Survey).name
