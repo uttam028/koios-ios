@@ -65,6 +65,8 @@ class PhotoContoller: UIViewController, UIImagePickerControllerDelegate, UINavig
         w = UIScreen.main.bounds.size.width
         h = UIScreen.main.bounds.size.height
         
+        
+        // initalize button
         photoButton = UIButton(type: .system)
         photoButton.setTitle("Import Photo", for: .normal)
         photoButton.frame = CGRect(x: w/3, y: 3*h/4, width: 100, height: 60)
@@ -72,6 +74,7 @@ class PhotoContoller: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.view.addSubview(photoButton)
         photoButton.addTarget(self, action: #selector(importTapped), for: .touchUpInside)
         
+        // initalize instructions
         photoInstructions = UILabel()
         photoInstructions.text = "Press import to import a photo from your camera roll"
         photoInstructions.lineBreakMode = .byWordWrapping
@@ -82,9 +85,7 @@ class PhotoContoller: UIViewController, UIImagePickerControllerDelegate, UINavig
         photoInstructions.textAlignment = .center
         self.view.addSubview(photoInstructions)
         
-        
-        
-        
+        // show example photo
         exampleImageView = UIImageView()
         exampleImageView.frame = CGRect(x: 0, y: 0, width: 300, height: 400)
         exampleImageView.center = CGPoint(x: w/2, y: h/2 + 5)
@@ -108,7 +109,6 @@ class PhotoContoller: UIViewController, UIImagePickerControllerDelegate, UINavig
         imageToImport.self
         imageToImport.sourceType = UIImagePickerController.SourceType.photoLibrary
         imageToImport.allowsEditing = false
-        
         self.present(imageToImport, animated: true){
             
         }
@@ -122,14 +122,15 @@ class PhotoContoller: UIViewController, UIImagePickerControllerDelegate, UINavig
             let imageWidth = image.size.width
             let imageHeight = image.size.height
             
-            if imageHeight > imageWidth {
+            
+            if imageHeight > imageWidth { // adjust view frame if height greater than width
                 let newFrameHeight = 400
                 let newFrameWidth = imageWidth / (imageHeight / CGFloat(newFrameHeight))
                 myImageView.frame = CGRect(x: 0, y: 0, width: Int(newFrameWidth), height: newFrameHeight)
                 myImageView.center = CGPoint(x: w/2, y: h/2)
                 
             }
-            else{
+            else{ // adjust view fame for image with width greater than height
                 let newFrameWidth = 350
                 let newFrameHeight = imageHeight / (imageWidth / CGFloat(newFrameWidth))
                 myImageView.frame = CGRect(x: 0, y: 0, width: newFrameWidth, height: Int(newFrameHeight))

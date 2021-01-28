@@ -39,7 +39,6 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate, SurveyOb
             print("comment:\(taskList[i].hasComment), q:\(taskList[i].text)")
             let type:String = taskList[i].type!
             let task = taskList[i]
-            let likertTest = "likertpresetlegend7"
             if type.lowercased() == "text"{
                 let sectionTag = "\(i)_\(type)"
                 let rowTag = sectionTag.appending("_row")
@@ -95,7 +94,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate, SurveyOb
                         row.tag = rowTag
                 }
 
-            }else if type.lowercased() == "selection2"{
+            }else if type.lowercased() == "selection"{
                 let sectionTag = "\(i)_\(type)"
                 form +++ SelectableSection<ImageCheckRow<String>>() { section in
                     if(task.isRequired>0){
@@ -103,6 +102,9 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate, SurveyOb
                     }
                     section.header = HeaderFooterView(title: quesString.appending(task.text!))
                     section.tag = sectionTag
+                    
+                    /*
+                    ----- THIS IS AN EXAMPLE OF THE CONDITIONAL, HERE IS WHERE WE CODE A QUESTION TO BE DEPENDENT ON ANOTHER QUESTION  ------
                     var sectionDecidingNum = 18
                     if i == 17{
                         section.hidden = Condition.function([])
@@ -118,6 +120,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate, SurveyOb
                             return false
                         }
                     }
+                    */
                 }
                 let availableOptions = task.possibleInput!.split(separator: "|")
                 var rowTag = 0
@@ -131,7 +134,8 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate, SurveyOb
                         rowTag = rowTag + 1
                       
                     
-                        
+                        /*
+                        ----- THIS IS WHERE THE QUESTION ANOTHER QUESTION DEPENDS ON IS EVALUATED TO DETERMINE IF THE QUESTION SHOULD BE HIDDEN -----
                         if i == 18{
                             lrow.onChange() {_   in
                                 if let dependentSection = self.form.allSections[17] as? Section{
@@ -139,6 +143,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate, SurveyOb
                                 }
                             }
                         }
+                        */
                         
                     }
                 }
@@ -197,7 +202,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate, SurveyOb
                             // fileForSubmission
                         }
                 }
-            }else if type.lowercased() == "selection"{
+            }else if type.lowercased() == "photo"{
                 let sectionTag = "\(i)_\(type)"
                 let rowTag = sectionTag.appending("_row")
                 form +++ Section(){ section in
@@ -253,18 +258,28 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate, SurveyOb
                           row.title = "Click here to answer"
                           row.tag = rowTag
                       }
-            }else if likertTest.contains("likert"){  // either likert4, likert5, likert7
+            }else if type.contains("likert"){  // either likert4, likert5, likert7
+                
+                // IN PRACTICE, THE TYPE WOULD INCLUDE 'preset' IF THE USER WANTS TO IGNORE THE CUSTOM OPTIONS AND INSTEAD USE THE PRESET OPTIONS AND INCLUDE 'legend' IF THE USER WANTS TO USE A LEGEND
+                
                   let sectionTag = "\(i)_\(type)"
                   let rowTag = sectionTag.appending("_row")
-                  var options = ["Horrible", "Bad", "Good", "Awesome"]
+                  var options = [] as [String]
+                
+                  // custom options
+                  for item in task.possibleInput!.split(separator: "|") {
+                      let option = String(item)
+                      options.append(option)
+                  }
                   
-                          
-                  if likertTest.lowercased().contains("preset"){
-                      if likertTest.lowercased().contains("4"){
+                
+                  // change options to preset
+                  if type.lowercased().contains("preset"){
+                      if type.lowercased().contains("4"){
                           options = ["Strongly Disagree", "Somewhat Disagree", "Somewhat Agree", "Strongly Agree"]
-                      }else if likertTest.lowercased().contains("5"){
+                      }else if type.lowercased().contains("5"){
                           options = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]
-                      }else if likertTest.lowercased().contains("7"){
+                      }else if type.lowercased().contains("7"){
                           options = ["Strongly Disagree", "Disagree", "Partly Disagree", "Neutral", "Partly Agree", "Agree", "Strongly Agree"]
                       }
                   }
@@ -279,12 +294,14 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate, SurveyOb
                   <<< SegmentedRow<String>(){ row in
                       row.tag = rowTag
                       var selectableOptions = options
-                      if likertTest.lowercased().contains("legend"){
-                          if likertTest.lowercased().contains("4"){
+                    
+                      // use numbers as selectable options if legend is chosen
+                      if type.lowercased().contains("legend"){
+                          if type.lowercased().contains("4"){
                               selectableOptions = ["1", "2", "3", "4"]
-                          }else if likertTest.lowercased().contains("5"){
+                          }else if type.lowercased().contains("5"){
                               selectableOptions = ["1", "2", "3", "4", "5"]
-                          }else if likertTest.lowercased().contains("7"){
+                          }else if type.lowercased().contains("7"){
                               selectableOptions = ["1", "2", "3", "4", "5", "6", "7"]
                           }
                       }
@@ -300,7 +317,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate, SurveyOb
                           // reduce font size if there are 7 options without a legend
                           // Note: It is best to use a legend for 7 options
                           var fontSize = 14
-                          if likertTest.lowercased().contains("7") && !likertTest.lowercased().contains("legend"){
+                          if type.lowercased().contains("7") && !type.lowercased().contains("legend"){
                               fontSize = 9
                           }
 
@@ -314,7 +331,9 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate, SurveyOb
                           UILabel.appearance(whenContainedInInstancesOf: [UISegmentedControl.self]).numberOfLines = 0
                     
                       }
-                if likertTest.lowercased().contains("legend"){
+                
+                // add legend below options
+                if type.lowercased().contains("legend"){
                     for (index, option) in options.enumerated() {
 
                         form.last! <<< TextRow(){ row in
@@ -580,7 +599,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate, SurveyOb
                             return
                         }
 
-                    }else if taskType == "selection2"{
+                    }else if taskType == "selection"{
                         let section  = form.sectionBy(tag: sectionTag) as! SelectableSection<ImageCheckRow<String>>
                         //print("select value:\(section?.selectedRows().map({$0.value!}))")
                         let answers:[String] = section.selectedRows().map({$0.value!})
@@ -656,13 +675,11 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate, SurveyOb
                        else{
                            response = String(describing: val)
                        }
-                    }else if taskType.contains("selection"){
+                    }else if taskType.contains("likert"){
                         let row:SegmentedRow<String> = form.rowBy(tag: "\(sectionTag)_row") as! SegmentedRow<String>
                         
                         var response = row.value ?? "nil"
-                        
-                        print(response)
-                        return
+
                         
                         if response.hasSuffix("_"){
                             response = String(response.dropLast())
