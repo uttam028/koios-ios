@@ -10,26 +10,27 @@ import UIKit
 import Eureka
 import CoreData
 
-class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
+class SurveyViewController: FormViewController, SurveyObjectVCDelegate, SurveyObjectPhotoVCDelegate {
 
     //studyId, surveyId, version is updated from ActiveSurveyViewController.swift
     var studyId:Int32 = 0
     var surveyId:Int32 = 0
     var version:Int16 = 0
-    
+
     let queueLimit = 3
-    
+
     var taskList:[Task] = []
     var surveyResponse:[SurveyResponse] = []
+    var filePhotoResponseDict = Dictionary<String, String>()
     var fileResponseDict = Dictionary<String, String>()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         //clearAllResponses()
-        
+
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Submit", style: .plain, target: self, action: #selector(submitClicked))
-        
+
         taskList = Syncer.sharedInstance.getAllTasks(studyId: studyId, surveyId: surveyId)
 
         var decrementForHeaders = 0
@@ -38,6 +39,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
             print("comment:\(taskList[i].hasComment), q:\(taskList[i].text)")
             let type:String = taskList[i].type!
             let task = taskList[i]
+            let likertTest = "likertpresetlegend7"
             if type.lowercased() == "text"{
                 let sectionTag = "\(i)_\(type)"
                 let rowTag = sectionTag.appending("_row")
@@ -53,7 +55,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                         row.placeholder = "Type your answer"
                         row.tag = rowTag
                 }
-                
+
             }else if type.lowercased() == "textarea"{
                 let sectionTag = "\(i)_\(type)"
                 let rowTag = sectionTag.appending("_row")
@@ -80,7 +82,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
             else if type.lowercased() == "date"{
                 let sectionTag = "\(i)_\(type)"
                 let rowTag = sectionTag.appending("_row")
-                
+
                 form +++ Section(){ section in
                     if(task.isRequired>0){
                         quesString = "*".appending(quesString)
@@ -92,8 +94,8 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                         //row.value = Date(timeIntervalSinceNow: 0)
                         row.tag = rowTag
                 }
-                
-            }else if type.lowercased() == "selection"{
+
+            }else if type.lowercased() == "selection2"{
                 let sectionTag = "\(i)_\(type)"
                 form +++ SelectableSection<ImageCheckRow<String>>() { section in
                     if(task.isRequired>0){
@@ -101,6 +103,21 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                     }
                     section.header = HeaderFooterView(title: quesString.appending(task.text!))
                     section.tag = sectionTag
+                    var sectionDecidingNum = 18
+                    if i == 17{
+                        section.hidden = Condition.function([])
+                        { form in
+                            print("evaluation")
+                            if let sectionDeciding = form.allSections[sectionDecidingNum] as? SelectableSection<ImageCheckRow<String>> {
+                                if sectionDeciding.selectedRow()?.value == "No" {
+                                    print("Removing...")
+                                    return true
+                                }
+                            }
+                            print("Adding...")
+                            return false
+                        }
+                    }
                 }
                 let availableOptions = task.possibleInput!.split(separator: "|")
                 var rowTag = 0
@@ -112,6 +129,17 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                         lrow.selectableValue = option
                         lrow.value = nil
                         rowTag = rowTag + 1
+                      
+                    
+                        
+                        if i == 18{
+                            lrow.onChange() {_   in
+                                if let dependentSection = self.form.allSections[17] as? Section{
+                                    dependentSection.evaluateHidden()
+                                }
+                            }
+                        }
+                        
                     }
                 }
                 if taskList[i].hasComment==1 {
@@ -120,7 +148,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                         row.tag = "\(sectionTag)_comment"
                     }
                 }
-                
+
             }else if type.lowercased() == "choice"{
                 let sectionTag = "\(i)_\(type)"
                 form +++ SelectableSection<ImageMultipleCheckRow<String>>() { section in
@@ -130,6 +158,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                     section.header = HeaderFooterView(title: quesString.appending(task.text!))
                     section.selectionType = SelectionType.multipleSelection
                     section.tag = sectionTag
+
                 }
                 let availableOptions = task.possibleInput!.split(separator: "|")
                 for item in availableOptions {
@@ -146,8 +175,8 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                         row.tag = "\(sectionTag)_comment"
                     }
                 }
-                
-                
+
+
             }else if type.lowercased() == "recording"{
                 let sectionTag = "\(i)_\(type)"
                 let rowTag = sectionTag.appending("_row")
@@ -168,7 +197,144 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                             // fileForSubmission
                         }
                 }
-            }/*else if type.contains(s: "MT001"){
+            }else if type.lowercased() == "selection"{
+                let sectionTag = "\(i)_\(type)"
+                let rowTag = sectionTag.appending("_row")
+                form +++ Section(){ section in
+                    if(task.isRequired>0){
+                        quesString = "*".appending(quesString)
+                    }
+                    section.header = HeaderFooterView(title: quesString.appending(task.text!))
+                    section.tag = sectionTag
+                    }
+                    <<< ButtonRow(){row in
+                        row.title = "Click here to upload a photo"
+                        row.onCellSelection {cell, row in
+                            self.filePhotoResponseDict[rowTag] = ""
+                            let secondVC = PhotoContoller(studyId: self.studyId, surveyId: self.surveyId, taskId: self.taskList[i].taskId, version: self.version, objectKey: rowTag)
+                            secondVC.delegate = self
+                            self.navigationController?.pushViewController(secondVC, animated: true)
+                            // fileForSubmission
+                        }
+                }
+            }else if type.lowercased() == "rating"{
+                let sectionTag = "\(i)_\(type)"
+                let rowTag = sectionTag.appending("_row")
+                form +++ Section(){ section in
+                    if(task.isRequired>0){
+                        quesString = "*".appending(quesString)
+                    }
+                    section.header = HeaderFooterView(title: quesString.appending(task.text!))
+                    section.tag = sectionTag
+                    }
+
+                    <<< PickerInlineRow<String>() {(row : PickerInlineRow<String>) -> Void in
+                        row.title = "Click here to answer"
+                        row.tag = rowTag
+                        row.options = []
+                        let availableOptions = task.possibleInput!.split(separator: "|")
+                        for item in availableOptions {
+                            let option = String(item)
+                            row.options.append(option)
+                        }
+                    }
+            }else if type.lowercased() == "numeric"{
+                  let sectionTag = "\(i)_\(type)"
+                  let rowTag = sectionTag.appending("_row")
+                  form +++ Section(){ section in
+                      if(task.isRequired>0){
+                          quesString = "*".appending(quesString)
+                      }
+                      section.header = HeaderFooterView(title: quesString.appending(task.text!))
+                      section.tag = sectionTag
+                      }
+
+                      <<< IntRow() {(row : IntRow) -> Void in
+                          row.title = "Click here to answer"
+                          row.tag = rowTag
+                      }
+            }else if likertTest.contains("likert"){  // either likert4, likert5, likert7
+                  let sectionTag = "\(i)_\(type)"
+                  let rowTag = sectionTag.appending("_row")
+                  var options = ["Horrible", "Bad", "Good", "Awesome"]
+                  
+                          
+                  if likertTest.lowercased().contains("preset"){
+                      if likertTest.lowercased().contains("4"){
+                          options = ["Strongly Disagree", "Somewhat Disagree", "Somewhat Agree", "Strongly Agree"]
+                      }else if likertTest.lowercased().contains("5"){
+                          options = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]
+                      }else if likertTest.lowercased().contains("7"){
+                          options = ["Strongly Disagree", "Disagree", "Partly Disagree", "Neutral", "Partly Agree", "Agree", "Strongly Agree"]
+                      }
+                  }
+                  form +++ Section(){ section in
+                       if(task.isRequired>0){
+                           quesString = "*".appending(quesString)
+                       }
+                       section.header = HeaderFooterView(title: quesString.appending(task.text!))
+                       section.tag = sectionTag
+                  }
+                
+                  <<< SegmentedRow<String>(){ row in
+                      row.tag = rowTag
+                      var selectableOptions = options
+                      if likertTest.lowercased().contains("legend"){
+                          if likertTest.lowercased().contains("4"){
+                              selectableOptions = ["1", "2", "3", "4"]
+                          }else if likertTest.lowercased().contains("5"){
+                              selectableOptions = ["1", "2", "3", "4", "5"]
+                          }else if likertTest.lowercased().contains("7"){
+                              selectableOptions = ["1", "2", "3", "4", "5", "6", "7"]
+                          }
+                      }
+                      row.options = options
+                    
+                      // alternate display for legend
+                      row.displayValueFor = { String  in
+                        return selectableOptions[options.firstIndex(of: String ?? "nil") ?? 0]
+                      }
+                      }.cellSetup{cell, row in
+                    
+                         
+                          // reduce font size if there are 7 options without a legend
+                          // Note: It is best to use a legend for 7 options
+                          var fontSize = 14
+                          if likertTest.lowercased().contains("7") && !likertTest.lowercased().contains("legend"){
+                              fontSize = 9
+                          }
+
+                          
+                          let font = UIFont(name: "Arial", size: CGFloat(fontSize))
+                          cell.segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: font!], for: .normal)
+                        
+                          // alter height and allow for multiple lines
+                          cell.height = {70}
+                          cell.segmentedControl.heightAnchor.constraint(equalToConstant: 50).isActive = true
+                          UILabel.appearance(whenContainedInInstancesOf: [UISegmentedControl.self]).numberOfLines = 0
+                    
+                      }
+                if likertTest.lowercased().contains("legend"){
+                    for (index, option) in options.enumerated() {
+
+                        form.last! <<< TextRow(){ row in
+                            row.title = "\(index+1) - \(option)"
+                        }.cellUpdate { cell, row in
+                            let aa = UIFont(name: "Arial", size: CGFloat(12))
+                            cell.textLabel?.font = aa
+                            cell.height = {35}
+                            cell.textLabel?.sizeToFit()
+                            cell.separatorInset = UIEdgeInsets(top: 0, left: 2000, bottom: 0, right: 0)
+        
+                        }
+                    }
+                }
+                
+                
+            } 
+                
+            
+            /*else if type.contains(s: "MT001"){
              print("task type: \(taskList[i].type)")
              var instString = "Tap to Start"
              if(task.isRequired>0){
@@ -190,7 +356,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
              _ = vc.navigationController?.popViewController(animated: true)
              })
              }
-             
+
              } else if type.contains(s: "MT002"){
              print("task type: \(taskList[i].type)")
              var instString = "Tap to Start"
@@ -212,7 +378,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
              _ = vc.navigationController?.popViewController(animated: true)
              })
              }
-             
+
              } else if type.contains(s: "MT003"){
              print("task type: \(taskList[i].type)")
              var instString = "Tap to Start"
@@ -235,7 +401,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
              _ = vc.navigationController?.popViewController(animated: true)
              })
              }
-             
+
              } else if type.contains(s: "MT005"){
              print("task type: \(taskList[i].type)")
              var instString = "Tap to Start"
@@ -258,7 +424,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
              _ = vc.navigationController?.popViewController(animated: true)
              })
              }
-             
+
              } else if type.contains(s: "MT010"){
              print("task type: \(taskList[i].type)")
              var instString = "Tap to Start"
@@ -281,7 +447,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
              _ = vc.navigationController?.popViewController(animated: true)
              })
              }
-             
+
              }else if type.contains(s: "MT011"){
              print("task type: \(taskList[i].type)")
              var instString = "Tap to Start"
@@ -304,7 +470,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
              _ = vc.navigationController?.popViewController(animated: true)
              })
              }
-             
+
              }else if type.contains(s: "MT014"){
              print("task type: \(taskList[i].type)")
              var instString = "Tap to Start"
@@ -327,14 +493,14 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
              _ = vc.navigationController?.popViewController(animated: true)
              })
              }
-             
+
              }*/
-            
+
         }
     }
-    
+
     func tableView(_: UITableView, willDisplayHeaderView view: UIView, forSection: Int) {
-        
+
         if let view = view as? UITableViewHeaderFooterView {
             if UIViewController().traitCollection.userInterfaceStyle == .dark{
                 view.textLabel?.textColor = .white
@@ -347,15 +513,15 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
             }
         }
     }
-    
+
     func displayRequiredAlert(qNumber:Int){
         let alert = UIAlertController(title: "Require an Answer to Question \(qNumber)", message: "", preferredStyle: .alert)
-    
+
         alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
-        
+
         self.present(alert, animated: true)
     }
-    
+
     @objc func submitClicked(){
         let confirmAlert = UIAlertController(title: "Confirm", message: "Are you sure you want to submit the survey?", preferredStyle: UIAlertController.Style.alert)
 
@@ -370,10 +536,11 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
 
         present(confirmAlert, animated: true, completion: nil)
     }
-    
+
     func submitForm(){
-        
+
         var surveyResponses:[SurveyResponseStruct] = []
+        var answeredQuestions = [Bool](repeating: false, count: form.allSections.count)
         for i in 0..<form.allSections.count{
             print("row number \(i).....\(String(describing: form.allSections[i].tag))")
             var response = ""
@@ -384,9 +551,9 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                 let tagTokens = sectionTag.split(separator: "_")
                 let taskIndex:Int = Int(tagTokens[0])!
                 if tagTokens.count > 1{
-                    
+
                     let taskType = tagTokens[1].lowercased()
-                    
+
                     if taskType == "text"{
                         let row:TextRow = form.rowBy(tag: "\(sectionTag)_row")!
                         if let temp = row.value{
@@ -412,8 +579,8 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                             displayRequiredAlert(qNumber: (i+1))
                             return
                         }
-                        
-                    }else if taskType == "selection"{
+
+                    }else if taskType == "selection2"{
                         let section  = form.sectionBy(tag: sectionTag) as! SelectableSection<ImageCheckRow<String>>
                         //print("select value:\(section?.selectedRows().map({$0.value!}))")
                         let answers:[String] = section.selectedRows().map({$0.value!})
@@ -428,16 +595,16 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                                 print("additioanl comment: \(comment)")
                             }
                         }
-                        
+
                         if response.hasSuffix("_"){
                             response = String(response.dropLast())
                         }
-                        
+
                         if (taskList[taskIndex].isRequired == 1 && (response.length == 0 && comment.length==0)){
                             displayRequiredAlert(qNumber: (i+1))
                             return
                         }
-                        
+
                     }else if taskType == "choice"{
                         let section  = form.sectionBy(tag: sectionTag) as! SelectableSection<ImageMultipleCheckRow<String>>
                         //print("select value:\(section?.selectedRows().map({$0.value!}))")
@@ -468,16 +635,53 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                             return
                         }
 
+                    }else if taskType == "rating"{
+                        let row:PickerInlineRow<String> = form.rowBy(tag: "\(sectionTag)_row") as! PickerInlineRow<String>
+                        response = row.value ?? "nil"
+                        
+                        if (response == "nil" && taskList[taskIndex].isRequired == 1){
+                            displayRequiredAlert(qNumber: (i+1))
+                            return
+                        }
+
+                    }else if taskType == "numeric"{
+                        let row:IntRow = form.rowBy(tag: "\(sectionTag)_row") as! IntRow
+                        let val = row.value ?? nil
+                        
+                       
+                       if (val == nil && taskList[taskIndex].isRequired == 1){
+                           displayRequiredAlert(qNumber: (i+1))
+                           return
+                       }
+                       else{
+                           response = String(describing: val)
+                       }
+                    }else if taskType.contains("selection"){
+                        let row:SegmentedRow<String> = form.rowBy(tag: "\(sectionTag)_row") as! SegmentedRow<String>
+                        
+                        var response = row.value ?? "nil"
+                        
+                        print(response)
+                        return
+                        
+                        if response.hasSuffix("_"){
+                            response = String(response.dropLast())
+                        }
+                        
+                        if (response == "nil" && taskList[taskIndex].isRequired == 1){
+                            displayRequiredAlert(qNumber: (i+1))
+                            return
+                        }
                     }
                 }
                 surveyResponses.append(SurveyResponseStruct(studyId: self.studyId, surveyId: self.surveyId, taskId: self.taskList[taskIndex].taskId, version: self.version, submissionTime: String(Utils.currentUnixTime()), submissionTimeZone: "", answerType: responseType, answer: response, comment: comment, objectUrl: objectUrl))
-                
+
             }
         }
         let context:NSManagedObjectContext = self.getContext()
         for i in 0..<surveyResponses.count{
             let newResponse:SurveyResponse = NSEntityDescription.insertNewObject(forEntityName: "SurveyResponse", into: context) as! SurveyResponse
-            
+
             newResponse.studyId = surveyResponses[i].studyId
             newResponse.surveyId = surveyResponses[i].surveyId
             newResponse.taskId = surveyResponses[i].taskId
@@ -490,7 +694,7 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
             newResponse.objectUrl = surveyResponses[i].objectUrl
         }
         context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        
+
         if context.hasChanges {
             do{
                 try context.save()
@@ -501,28 +705,28 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
         printAllResponses(responses: getAllResponses())
         print("total rows: \(getAllResponses().count)")
         Syncer.sharedInstance.uploadSurveyResponses()
-        
+
         //reno - save current time as last survey response time
         UserDefaults.standard.set(Date(), forKey: String(surveyId))
-        
-        
+
+
         // if event survey or follow-up update last3responses queue
         if(surveyId==23 || surveyId == 22){
-            
+
             // check if null or not
             if var last3responses = UserDefaults.standard.array(forKey: String(surveyId) + "-last3responses") {
-                
+
                 // last 3 responses is full (reached queueLimit), remove oldest and add newest
                 if (last3responses.count == queueLimit){
                     print("reached limit")
-                    
+
                     // remove oldest response, add newest
                     last3responses.removeLast()
                     last3responses.insert(Date(), at: 0)
-                    
+
                     UserDefaults.standard.set(last3responses, forKey: String(surveyId) + "-last3responses")
                 }
-                    
+
                 // last3responses has room for another date so add to it
                 else{
                     print("room open")
@@ -530,25 +734,25 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
                     UserDefaults.standard.set(last3responses, forKey: String(surveyId) + "-last3responses")
                 }
             }
-                
+
             // last3responses is null, so create queue with current date and time
             else{
                 print("was null")
                 let last3responses = [Date()]
                 UserDefaults.standard.set(last3responses, forKey: String(surveyId) + "-last3responses")
             }
-            
+
         }
-        
-                
+
+
         self.navigationController?.popViewController(animated: true)
-        
+
     }
-    
+
     private func getContext()->NSManagedObjectContext{
         return (UIApplication.shared.delegate as! AppDelegate).managedBackgroundContext
     }
-    
+
     func getAllResponses()->[SurveyResponse]!{
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "SurveyResponse")
         //fetchRequest.predicate = NSPredicate(format: "studyId = %d", studyId)
@@ -558,9 +762,9 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
             print("error:\(error)")
             return nil
         }
-        
+
     }
-    
+
     func clearAllResponses(){
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "SurveyResponse")
         let request = NSBatchDeleteRequest(fetchRequest: fetchRequest)
@@ -571,19 +775,19 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
             print("error while deleting...")
         }
     }
-    
+
     func printAllResponses(responses:[SurveyResponse]){
         for response in responses{
             print("study id:\(response.studyId), survey id:\(response.surveyId), task id:\(response.taskId), version:\(response.version), submission time:\(response.submissionTime), time zone:\(response.submissionTimeZone), answer type:\(response.answerType), answer:\(response.answer), comment:\(response.comment), objectUrl:\(response.objectUrl)")
         }
     }
-    
-    
+
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
     func childViewControllerResponse(refernceAnswer: String) {
         print("reference answer: \(refernceAnswer)")
     }
@@ -593,15 +797,19 @@ class SurveyViewController: FormViewController, SurveyObjectVCDelegate {
         fileResponseDict[objectKey] = objectUrl
     }
     
+    func passPhotoURL(objectKey: String, objectUrl: String){
+        print("receive key and value from delegate, \(objectKey), \(objectUrl)")
+        filePhotoResponseDict[objectKey] = objectUrl
+    }
+
     /*
      // MARK: - Navigation
-     
+
      // In a storyboard-based application, you will often want to do a little preparation before navigation
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
      // Get the new view controller using segue.destinationViewController.
      // Pass the selected object to the new view controller.
      }
      */
-    
-}
 
+}

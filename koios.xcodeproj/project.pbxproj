@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		59B2A038691756B20E003720 /* libPods-koios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2431E0D55377FD506570C9F9 /* libPods-koios.a */; };
+		AB42BBB725BCAF910041BCFD /* PhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB42BBB625BCAF910041BCFD /* PhotoController.swift */; };
 		DD399AB82524E97800DB1B8B /* RecordingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD399AB72524E97800DB1B8B /* RecordingController.swift */; };
 		DD3E8B032505528C0062CF4A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DD3E8B022505528C0062CF4A /* GoogleService-Info.plist */; };
 		DD4B12FF24DDB766004D19CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4B12FE24DDB766004D19CB /* AppDelegate.swift */; };
@@ -94,6 +95,7 @@
 		2431E0D55377FD506570C9F9 /* libPods-koios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-koios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		73869C27B82034E297420C59 /* Pods-koios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koios.release.xcconfig"; path = "Target Support Files/Pods-koios/Pods-koios.release.xcconfig"; sourceTree = "<group>"; };
 		917CF28ECA065061786CCAED /* Pods-koios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koios.debug.xcconfig"; path = "Target Support Files/Pods-koios/Pods-koios.debug.xcconfig"; sourceTree = "<group>"; };
+		AB42BBB625BCAF910041BCFD /* PhotoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoController.swift; sourceTree = "<group>"; };
 		DD0128762509F5D60029D5C3 /* koios v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "koios v2.xcdatamodel"; sourceTree = "<group>"; };
 		DD399AB72524E97800DB1B8B /* RecordingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingController.swift; sourceTree = "<group>"; };
 		DD3E8B022505528C0062CF4A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -283,6 +285,7 @@
 				DD7A874F24E05A6700F46DB4 /* ActiveSurveysViewController.swift */,
 				DD7A874E24E05A6700F46DB4 /* Survey.storyboard */,
 				DD7A875124E05A6700F46DB4 /* SurveyViewController.swift */,
+				AB42BBB625BCAF910041BCFD /* PhotoController.swift */,
 			);
 			path = SurveyManagement;
 			sourceTree = "<group>";
@@ -567,6 +570,7 @@
 				DD7A87C324E0DD9900F46DB4 /* ContextViewController.swift in Sources */,
 				DD7A87E224E0EDCE00F46DB4 /* MotorTaskViewController.swift in Sources */,
 				DD7A879624E0DD4000F46DB4 /* MyStudyDetailsViewController.swift in Sources */,
+				AB42BBB725BCAF910041BCFD /* PhotoController.swift in Sources */,
 				DD7A87CA24E0DD9900F46DB4 /* Pagable.swift in Sources */,
 				DD7A876524E05A9D00F46DB4 /* FCFileManager.m in Sources */,
 				DD7A879F24E0DD4000F46DB4 /* OpenStudiesViewController.swift in Sources */,

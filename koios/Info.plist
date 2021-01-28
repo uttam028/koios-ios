@@ -30,6 +30,8 @@
 	<string>Koios uses location service in energy efficient manner for running in the background. Please select &amp;quot;Always Allow&amp;quot; to maintain compliance in the study.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Koios uses microphone for voice recording for surveys</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Koios uses your photo library if you are participating in a study with photo submission</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

@@ -159,6 +159,23 @@ class ProfileViewController: FormViewController {
             row.title = "Version"
             row.value = Bundle.main.infoDictionary!["CFBundleShortVersionString"]! as! Cell<String>.Value
         }
+        form +++ Section()
+            <<< TextRow(){ row in
+                row.title = "Email"
+                let email:String = Utils.getDataFromUserDefaults(key: "email") as! String
+                row.value = email
+                //row.placeholder = email
+                row.disabled = true
+                
+            }
+        /*
+        form +++ Section()
+            <<< SwitchRow(){ row in
+                row.title = "Pause participation in all studies"
+                }.cellUpdate() {cell, row in
+                cell.textLabel?.textColor = .red
+            }
+        */
         
     }
     
