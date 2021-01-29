@@ -12,3 +12,6 @@
 
 5. PAUSE ACTIVITY BUTTON
 - At Dr. Poellabauer's request, I added a toggle button in the profile page that allows the user to pause all activity (currently does nothing when set to on). This would remove all surveys and not ask them to do tasks, as well as stop notificaitons.
+
+6. CONDITONAL (NOT ACTUALLY A CHANGE)
+- I commented out the work I did on conditional questions, but I left it there in case you want to implement conditional questions in the future. The examples on the Internet weren't the easiest to follow.
